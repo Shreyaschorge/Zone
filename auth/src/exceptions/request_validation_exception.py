@@ -1,4 +1,4 @@
-from custom_exceptions import CustomException
+from exceptions import CustomException
 
 
 class RequestValidationException(CustomException):

@@ -1,9 +1,10 @@
 
-from custom_exceptions import CustomException
+from exceptions import CustomException
 
-class DatabaseException(CustomException):
 
-    status_code = 500
+class BadRequestException(CustomException):
+
+    status_code = 400
 
     def __init__(self, message):
         super().__init__(message)

@@ -1,7 +1,7 @@
 from flask import jsonify
 from flask_restful import Api
 
-from custom_exceptions import CustomException
+from exceptions import CustomException
 
 
 class ExtendedAPI(Api):

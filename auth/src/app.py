@@ -6,7 +6,7 @@ from flask import Flask, jsonify
 
 from ma import ma
 from resources.user import UserRegister
-from custom_exceptions.errors import ExtendedAPI
+from exceptions.errors import ExtendedAPI
 
 app = Flask(__name__)
 

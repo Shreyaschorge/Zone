@@ -4,7 +4,7 @@ from marshmallow.exceptions import ValidationError
 
 from model import UserModel
 from schema import UserSchema
-from custom_exceptions import BadRequestException, RequestValidationException, DatabaseException
+from exceptions import BadRequestException, RequestValidationException, DatabaseException
 
 user_schema = UserSchema()
 ph = PasswordHasher()
