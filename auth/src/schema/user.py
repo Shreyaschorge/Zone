@@ -15,4 +15,4 @@ class UserSchema(ma.SQLAlchemyAutoSchema):
         model = UserModel
         load_instance = True
         dump_only = ("id",)
-        load_only = ("password",)  # Excluded field from res
+        load_only = ("password", "id")  # Excluded field from res

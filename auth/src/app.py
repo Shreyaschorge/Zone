@@ -2,17 +2,70 @@
 import os
 
 from flask import Flask, jsonify
-# from flask_restful import Api
+from flask_jwt_extended import JWTManager
 
 from ma import ma
-from resources.user import UserRegister
-from exceptions.errors import ExtendedAPI
+from resources.user import UserRegister, UserLogin, UserLogout, TokenRefresh
+from exceptions import ExtendedAPI
+from blocklist import BLOCKLIST
 
 app = Flask(__name__)
 
 app.config['DEBUG'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
     'DATABASE_URL', 'sqlite:///data.db')
+app.config['PROPAGATE_EXCEPTIONS'] = True
+app.config['JWT_SECRET_KEY'] = "Temp_Secret"
+
+api = ExtendedAPI(app)
+jwt = JWTManager(app)
+
+
+@jwt.token_in_blocklist_loader
+def check_if_token_in_blocklist(jwt_header, jwt_payload):
+    return jwt_payload['jti'] in BLOCKLIST
+
+
+@jwt.expired_token_loader
+def expired_token_callback(jwt_header, jwt_payload):
+    return jsonify({
+        "errors": [{"message": "Token Expired"}]
+    }), 401
+
+
+@jwt.invalid_token_loader
+def invalid_token_callback(error):
+    return jsonify({
+        "errors": [{"message": "Signature verification failed. Invalid Token."}]
+    }), 401
+
+
+@jwt.token_verification_failed_loader
+def token_verification_failed(jwt_header, jwt_payload):
+    return jsonify({
+        "errors": [{"message": "Token verification failed"}]
+    }), 401
+
+
+@jwt.unauthorized_loader
+def missing_token_callback(error):
+    return jsonify({
+        "errors": [{"message": "Missing token in the request"}]
+    }), 401
+
+
+@jwt.needs_fresh_token_loader
+def token_not_fresh_callback(jwt_header, jwt_payload):
+    return jsonify({
+        "errors": [{"message": "Token is not fresh"}]
+    }), 401
+
+
+@jwt.revoked_token_loader
+def revoked_token_callback(jwt_header, jwt_payload):
+    return jsonify({
+        "errors": [{"message": "Token has been revoked"}]
+    }), 401
 
 
 @app.errorhandler(Exception)
@@ -30,9 +83,10 @@ def handle_error(err):
         }), 500
 
 
-api = ExtendedAPI(app)
-
 api.add_resource(UserRegister, '/register')
+api.add_resource(UserLogin, '/login')
+api.add_resource(UserLogout, '/logout')
+api.add_resource(TokenRefresh, '/refresh')
 
 if __name__ == '__main__':
     from db import db

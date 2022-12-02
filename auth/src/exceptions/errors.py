@@ -20,4 +20,9 @@ class ExtendedAPI(Api):
                 "errors": err.serialize_errors()
             }), err.status_code
 
+        if isinstance(err, JWTExtendedException):
+            return jsonify({
+                'errors': [{'message': f'{err}'}]
+            }), 400
+
         return jsonify(**err.kwargs), err.http_status_code
