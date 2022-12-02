@@ -1,4 +1,3 @@
-
 import os
 
 from flask import Flask, jsonify
@@ -7,7 +6,7 @@ from flask_jwt_extended import JWTManager
 from ma import ma
 from resources.user import UserRegister, UserLogin, UserLogout, TokenRefresh
 from exceptions import ExtendedAPI
-from blocklist import BLOCKLIST
+from blocklist import jwt_redis_blocklist
 
 app = Flask(__name__)
 
@@ -23,7 +22,8 @@ jwt = JWTManager(app)
 
 @jwt.token_in_blocklist_loader
 def check_if_token_in_blocklist(jwt_header, jwt_payload):
-    return jwt_payload['jti'] in BLOCKLIST
+    jti = jwt_payload['jti']
+    return jwt_redis_blocklist.get(jti) is not None
 
 
 @jwt.expired_token_loader

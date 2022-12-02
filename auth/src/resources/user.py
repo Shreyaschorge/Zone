@@ -1,3 +1,6 @@
+import redis
+from datetime import timedelta
+
 from flask_restful import Resource, request
 from argon2 import PasswordHasher
 from argon2.exceptions import VerifyMismatchError
@@ -14,10 +17,11 @@ from model import UserModel
 from schema import UserSchema
 from exceptions import BadRequestException, RequestValidationException, DatabaseException
 
-from blocklist import BLOCKLIST
+from blocklist import jwt_redis_blocklist
 
 user_schema = UserSchema()
 ph = PasswordHasher(memory_cost=32768)
+ACCESS_EXPIRES = timedelta(hours=1)
 
 
 class UserRegister(Resource):
@@ -89,7 +93,7 @@ class UserLogout(Resource):
     @jwt_required()
     def post(self):
         jti = get_jwt()['jti']
-        BLOCKLIST.add(jti)
+        jwt_redis_blocklist.set(jti, "", ex=ACCESS_EXPIRES)
         return {"message": "Successfully logged out"}, 200
 
 
