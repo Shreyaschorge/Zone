@@ -8,13 +8,14 @@ from resources.user import UserRegister, UserLogin, UserLogout, TokenRefresh
 from exceptions import ExtendedAPI
 from blocklist import jwt_redis_blocklist
 
+from keys import JWT_SECRET_KEY, PG_USER, PG_PASSWORD, PG_HOST, PG_PORT, PG_DATABASE
+
 app = Flask(__name__)
 
 app.config['DEBUG'] = True
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
-    'DATABASE_URL', 'postgresql://postgres:postgres@localhost:5432/Users')
+app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{PG_USER}:{PG_PASSWORD}@{PG_HOST}:{PG_PORT}/{PG_DATABASE}'
 app.config['PROPAGATE_EXCEPTIONS'] = True
-app.config['JWT_SECRET_KEY'] = "Temp_Secret"
+app.config['JWT_SECRET_KEY'] = JWT_SECRET_KEY
 
 api = ExtendedAPI(app)
 jwt = JWTManager(app)
@@ -87,16 +88,3 @@ api.add_resource(UserRegister, '/register')
 api.add_resource(UserLogin, '/login')
 api.add_resource(UserLogout, '/logout')
 api.add_resource(TokenRefresh, '/refresh')
-
-if __name__ == '__main__':
-    from db import db
-
-    db.init_app(app)
-    ma.init_app(app)
-
-    if app.config['DEBUG']:
-        @app.before_first_request
-        def create_tables():
-            db.create_all()
-
-    app.run(port=5001)

@@ -1,5 +1,5 @@
+import os
 import redis
+from keys import REDIS_URI
 
-jwt_redis_blocklist = redis.StrictRedis(
-    host="127.0.0.1", port=6379, db=0, decode_responses=True
-)
+jwt_redis_blocklist = redis.from_url(REDIS_URI)

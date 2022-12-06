@@ -13,8 +13,8 @@ marshmallow-sqlalchemy = "*"
 argon2-cffi = "*"
 nanoid = "*"
 flask-jwt-extended = "*"
-psycopg2-binary = "*"
 redis = "*"
+psycopg2-binary = "==2.9.4"
 
 [dev-packages]
 
