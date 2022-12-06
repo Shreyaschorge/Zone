@@ -12,9 +12,17 @@ spec:
       labels:
         app: auth-postgres
     spec:
+      volumes:
+        - name: auth-pg-volume
+          persistentVolumeClaim:
+            claimName: auth-pg-volume-claim
       containers:
         - name: auth-postgres
           image: postgres:11-alpine
+          volumeMounts:
+            - name: auth-pg-volume
+              mountPath: /var/lib/postgresql/data
+              subPath: postgres
           env:
             - name: POSTGRES_USER
               value: postgres

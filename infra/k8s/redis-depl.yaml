@@ -12,9 +12,16 @@ spec:
       labels:
         app: redis
     spec:
+      volumes:
+        - name: redis-volume
+          persistentVolumeClaim:
+            claimName: redis-volume-claim
       containers:
         - name: redis
           image: redis
+          volumeMounts:
+            - name: redis-volume
+              mountPath: /data
 ---
 apiVersion: v1
 kind: Service
