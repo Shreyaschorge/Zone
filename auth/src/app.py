@@ -84,7 +84,7 @@ def handle_error(err):
         }), 500
 
 
-api.add_resource(UserRegister, '/register')
-api.add_resource(UserLogin, '/login')
-api.add_resource(UserLogout, '/logout')
-api.add_resource(TokenRefresh, '/refresh')
+api.add_resource(UserRegister, '/api/register')
+api.add_resource(UserLogin, '/api/login')
+api.add_resource(UserLogout, '/api/logout')
+api.add_resource(TokenRefresh, '/api/refresh')
