@@ -36,11 +36,7 @@ class UserRegister(Resource):
             raise BadRequestException('User already exists')
 
         user.password = ph.hash(user.password)
-
-        try:
-            user.save_to_db()
-        except:
-            raise DatabaseException('An error occurred while creating a user')
+        user.save_to_db()
 
         return user_schema.dump(user), 201
 
