@@ -5,7 +5,7 @@ from flask_jwt_extended import JWTManager
 
 from ma import ma
 from resources.user import UserRegister, UserLogin, UserLogout, TokenRefresh
-from exceptions import ExtendedAPI
+from extended_api import ExtendedAPI
 from blocklist import jwt_redis_blocklist
 
 from keys import JWT_SECRET_KEY, PG_USER, PG_PASSWORD, PG_HOST, PG_PORT, PG_DATABASE

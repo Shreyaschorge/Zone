@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "8d5c8e4511e09c6b3e6eaf05452ff9ef145cb9f31ca1635e969eab9fce7cccfb"
+            "sha256": "8011851581aeacdae667e32a00fb84ff87a3c0b7d1350a3d180d5c1caf1eeaab"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -271,11 +271,11 @@
         },
         "packaging": {
             "hashes": [
-                "sha256:dd47c42927d89ab911e606518907cc2d3a1f38bbd026385970643f9c5b8ecfeb",
-                "sha256:ef103e05f519cdc783ae24ea4e2e0f508a9c99b2d4969652eed6a2e1ea5bd522"
+                "sha256:2198ec20bd4c017b8f9717e00f0c8714076fc2fd93816750ab48e2c41de2cfd3",
+                "sha256:957e2148ba0e1a3b282772e791ef1d8083648bc131c8ab0c1feba110ce1146c3"
             ],
-            "markers": "python_version >= '3.6'",
-            "version": "==21.3"
+            "markers": "python_version >= '3.7'",
+            "version": "==22.0"
         },
         "psycopg2-binary": {
             "hashes": [
@@ -357,14 +357,6 @@
             "markers": "python_version >= '3.7'",
             "version": "==2.6.0"
         },
-        "pyparsing": {
-            "hashes": [
-                "sha256:2b020ecf7d21b687f219b71ecad3631f644a47f01403fa1d1036b0c6416d70fb",
-                "sha256:5026bae9a10eeaefb61dab2f09052b9f4307d44aee4eda64b309723d8d206bbc"
-            ],
-            "markers": "python_full_version >= '3.6.8'",
-            "version": "==3.0.9"
-        },
         "pytz": {
             "hashes": [
                 "sha256:222439474e9c98fced559f1709d89e6c9cbf8d79c794ff3eb9f8800064291427",
@@ -442,6 +434,14 @@
             ],
             "markers": "python_version >= '3.7'",
             "version": "==2.2.2"
+        },
+        "zone-common": {
+            "hashes": [
+                "sha256:19ef05f682de54e4999ccfad5b5e89355f28643a4f04a121ba91c1cf8c97bf76",
+                "sha256:77e2a0d4e6f120dfb16b78ba86e28c0aea76834c435ce3f1bb60656e4098c07c"
+            ],
+            "index": "pypi",
+            "version": "==0.0.6"
         }
     },
     "develop": {}

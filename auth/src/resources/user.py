@@ -15,7 +15,7 @@ from flask_jwt_extended import (
 
 from model import UserModel
 from schema import UserSchema
-from exceptions import BadRequestException, RequestValidationException, DatabaseException
+from zone_common.exceptions import BadRequestException, RequestValidationException, DatabaseException
 
 from blocklist import jwt_redis_blocklist
 

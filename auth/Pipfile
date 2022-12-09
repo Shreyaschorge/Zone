@@ -15,6 +15,7 @@ nanoid = "*"
 flask-jwt-extended = "*"
 redis = "*"
 psycopg2-binary = "==2.9.4"
+zone-common = "*"
 
 [dev-packages]
 
