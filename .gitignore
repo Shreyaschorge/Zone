@@ -2,6 +2,10 @@ secrets.txt
 
 .vscode
 
+# Flask
+instance/
+.webassets-cache
+
 # mypy
 .mypy_cache/
 .dmypy.json
