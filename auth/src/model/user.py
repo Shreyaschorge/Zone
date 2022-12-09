@@ -25,4 +25,4 @@ class UserModel(db.Model):
 
 @db.event.listens_for(UserModel, 'before_insert')
 def add_uuid(mapper, connect, target):
-    target.uuid = f'user_{generate(size=20)}'
+    target.uuid = f'user_{generate(size=30)}'

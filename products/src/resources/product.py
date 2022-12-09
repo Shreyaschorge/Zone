@@ -1,4 +1,10 @@
 from flask_restful import Resource, request
+from marshmallow.exceptions import ValidationError
+from zone_common.exceptions import RequestValidationException, DatabaseException
+
+from schema.product import ProductSchema
+
+product_schema = ProductSchema()
 
 
 class Product(Resource):
@@ -18,4 +24,16 @@ class ProductList(Resource):
         pass
 
     def post(self):
-        return 'Add product', 201
+
+        try:
+            product = product_schema.load(request.get_json())
+            product.userId = "User123"
+        except ValidationError as err:
+            raise RequestValidationException(err)
+
+        try:
+            product.save_to_db()
+        except:
+            raise DatabaseException('An error occurred while creating product')
+
+        return product_schema.dump(product), 201
