@@ -22,8 +22,16 @@ class ProductModel(db.Model):
         db.session.commit()
 
     @classmethod
+    def find_all(cls):
+        return cls.query.all()
+
+    @classmethod
     def find_by_uuid(cls, uuid):
         return cls.query.filter_by(uuid=uuid).first()
+
+    @classmethod
+    def find_user_products(cls, userUuid):
+        return cls.query.filter_by(userId=userUuid).all()
 
 
 @db.event.listens_for(ProductModel, 'before_insert')
