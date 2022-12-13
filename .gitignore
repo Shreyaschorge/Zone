@@ -4,6 +4,7 @@ secrets.txt
 
 # Flask
 instance/
+data.db
 .webassets-cache
 
 # mypy

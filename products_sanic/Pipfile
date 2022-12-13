@@ -5,9 +5,12 @@ name = "pypi"
 
 [packages]
 sanic = "*"
-sqlalchemy = "*"
 asyncpg = "*"
 marshmallow = "*"
+aiosqlite = "*"
+zone-common = "*"
+sqlalchemy = {extras = ["asyncio"], version = "*"}
+nanoid = "*"
 
 [dev-packages]
 
