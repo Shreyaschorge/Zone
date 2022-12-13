@@ -3,6 +3,7 @@ from marshmallow import Schema, fields, validate
 
 class ProductSchema(Schema):
 
+    id = fields.Int()
     title = fields.Str(required=True, validate=[
         validate.Length(max=50, error="Title must be less than 20 characters")])
     price = fields.Float(required=True, validate=[validate.Range(
@@ -11,7 +12,6 @@ class ProductSchema(Schema):
         max=100, error="Description cannot exceed 100 characters")])
     uuid = fields.Str()
     userId = fields.Str()
-    id = fields.Int()
 
     class Meta:
         load_only = ("id",)

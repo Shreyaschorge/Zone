@@ -1,20 +1,14 @@
 import sanic
 from sanic import response
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import sessionmaker
-
-from models.product import Product
-from db import bind
-
-from contextvars import ContextVar
 from zone_common.exceptions import CustomException
+from contextvars import ContextVar
 
 from resources.product import product
+from models.product import Product
+from db import bind, _sessionmaker
 
 app = sanic.Sanic(name="product_service")
 app.blueprint(product)
-
-_sessionmaker = sessionmaker(bind, AsyncSession, expire_on_commit=False)
 
 _base_model_session_ctx = ContextVar("session")
 
@@ -56,5 +50,4 @@ async def catch_anything(request, err):
 
 
 if __name__ == "__main__":
-
     app.run(port=5001, auto_reload=True)
