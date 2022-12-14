@@ -13,7 +13,7 @@ class ExtendedAPI(Api):
 
         # TODO - Implement logging
 
-        print("log this error", err, type(err))
+        print("auth_service error", err, type(err))
 
         if isinstance(err, CustomException):
             return jsonify({

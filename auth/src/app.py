@@ -76,7 +76,7 @@ def handle_error(err):
     """
 
     # TODO Log this too
-    print('\n\n', err, '\n\n')
+    print('auth_service error', err)
 
     if isinstance(err, Exception):
         return jsonify({

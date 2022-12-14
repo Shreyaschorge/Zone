@@ -41,7 +41,7 @@ async def close_session(request, response):
 @app.exception(Exception)
 async def catch_anything(request, err):
 
-    print("log this error", err, type(err))
+    print("product_service error", err, type(err))
 
     if isinstance(err, CustomException):
         return response.json({
