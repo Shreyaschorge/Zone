@@ -1,20 +1,18 @@
-from ma import ma
-from marshmallow import fields, validate
-
-from model.product import ProductModel
+from marshmallow import Schema, fields, validate
 
 
-class ProductSchema(ma.SQLAlchemyAutoSchema):
+class ProductSchema(Schema):
 
+    id = fields.Int()
     title = fields.Str(required=True, validate=[
         validate.Length(max=50, error="Title must be less than 20 characters")])
     price = fields.Float(required=True, validate=[validate.Range(
         min=1, error="Price must be greater than 0")])
     description = fields.Str(required=True, validate=[validate.Length(
         max=100, error="Description cannot exceed 100 characters")])
+    uuid = fields.Str()
+    userId = fields.Str()
 
     class Meta:
-        model = ProductModel
-        load_instance = True
+        load_only = ("id",)
         dump_only = ("id",)
-        load_only = ("id",)  # Excluded field from res

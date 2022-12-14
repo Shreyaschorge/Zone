@@ -1,80 +1,101 @@
-from flask_restful import Resource, request
+from sanic import Blueprint, response
+from sqlalchemy.future import select
+from sqlalchemy.orm.exc import NoResultFound
 from marshmallow.exceptions import ValidationError
-from zone_common.exceptions import (
-    RequestValidationException,
-    NotFoundException,
-    UnauthorizedException,
-    BadRequestException
-)
+from zone_common.exceptions import RequestValidationException, NotFoundException, UnauthorizedException, BadRequestException
 
+from models.product import Product
 from schema.product import ProductSchema
-from middleware.require_auth import require_auth
-from model.product import ProductModel
+from middlewares.require_auth import require_auth
+
+product = Blueprint(name="product", url_prefix="/api/products")
 
 product_schema = ProductSchema()
 product_list_schema = ProductSchema(many=True)
-users_product_schema = ProductSchema(many=True)
 
 
-class Product(Resource):
-
-    @require_auth
-    def get(self, uuid):
-        existing_product = ProductModel.find_by_uuid(uuid)
-
-        if not existing_product:
-            raise NotFoundException()
-
-        return product_schema.dump(existing_product), 200
-
-    @require_auth
-    def put(self, uuid):
-        existing_product = ProductModel.find_by_uuid(uuid)
-        if not existing_product:
-            raise NotFoundException()
-
-        current_user = request.environ.get("current_user")
-        if existing_product.userId != current_user["uuid"]:
-            raise UnauthorizedException()
-
-        try:
-            product = product_schema.load(request.get_json())
-        except ValidationError as err:
-            raise RequestValidationException(err)
-
-        existing_product.title = product.title
-        existing_product.description = product.description
-        existing_product.price = product.price
-
-        existing_product.save_to_db()
-
-        return product_schema.dump(existing_product), 200
+@product.get('/')
+async def all_products(req):
+    session = req.ctx.session
+    q = select(Product)
+    result = await session.execute(q)
+    all_products = product_list_schema.dump(
+        result.scalars())
+    return response.json(all_products, status=200)
 
 
-class ProductList(Resource):
+@product.get('/<uuid>')
+async def single_product(req, uuid):
+    session = req.ctx.session
+    q = select(Product).where(Product.uuid == uuid)
 
-    def get(self):
-        all_products = ProductModel.find_all()
-        return product_list_schema.dump(all_products), 200
+    try:
+        result = await session.execute(q)
+        existing_product = result.scalars().one()
+    except NoResultFound as err:
+        raise NotFoundException()
 
-    @require_auth
-    def post(self):
-        try:
-            product = product_schema.load(request.get_json())
-            current_user = request.environ.get("current_user")
-            product.userId = current_user["uuid"]
-        except ValidationError as err:
-            raise RequestValidationException(err)
-
-        product.save_to_db()
-
-        return product_schema.dump(product), 201
+    product = product_schema.dump(existing_product)
+    return response.json(product, status=200)
 
 
-class UsersProduct(Resource):
+@product.post("/")
+@require_auth
+async def create_product(req):
+    try:
+        _product = product_schema.load(req.json)
+        _product["userId"] = req.ctx.current_user['uuid']
+    except ValidationError as err:
+        raise RequestValidationException(err)
 
-    @require_auth
-    def get(self):
-        current_user = request.environ.get("current_user")
-        usersProducts = ProductModel.find_user_products(current_user["uuid"])
-        return users_product_schema.dump(usersProducts), 200
+    session = req.ctx.session
+    async with session.begin():
+        product = Product(**_product)
+        session.add(product)
+    return response.json(product_schema.dump(product.__dict__), status=201)
+
+
+@product.put("/<uuid>")
+@require_auth
+async def update_product(req, uuid):
+    session = req.ctx.session
+    q = select(Product).where(Product.uuid == uuid)
+
+    try:
+        result = await session.execute(q)
+        existing_product = result.scalars().one()
+    except NoResultFound as err:
+        raise NotFoundException()
+
+    if existing_product.userId != req.ctx.current_user['uuid']:
+        raise BadRequestException(
+            "Not allowed to update someone's else product")
+
+    try:
+        product = product_schema.load(req.json)
+    except ValidationError as err:
+        raise RequestValidationException(err)
+
+    existing_product.title = product["title"]
+    existing_product.description = product["description"]
+    existing_product.price = product["price"]
+
+    session.add(existing_product)
+    await session.commit()
+
+    return response.json(product_schema.dump(existing_product), status=200)
+
+
+@product.get("/usersProducts")
+@require_auth
+async def users_products(req):
+
+    userId = req.ctx.current_user["uuid"]
+
+    session = req.ctx.session
+    q = select(Product).where(Product.userId == userId)
+    result = await session.execute(q)
+    all_users_products = product_list_schema.dump(
+        result.scalars())
+
+    return response.json(all_users_products, status=200)
