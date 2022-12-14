@@ -8,10 +8,10 @@ sanic = "*"
 asyncpg = "*"
 marshmallow = "*"
 aiosqlite = "*"
-zone-common = "*"
 sqlalchemy = {extras = ["asyncio"], version = "*"}
 nanoid = "*"
 pyjwt = "*"
+zone-common = "*"
 
 [dev-packages]
 
