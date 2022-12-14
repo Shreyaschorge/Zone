@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: products-postgres-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: products-postgres
+  template:
+    metadata:
+      labels:
+        app: products-postgres
+    spec:
+      volumes:
+        - name: products-pg-volume
+          persistentVolumeClaim:
+            claimName: products-pg-volume-claim
+      containers:
+        - name: products-postgres
+          image: postgres:11-alpine
+          volumeMounts:
+            - name: products-pg-volume
+              mountPath: /var/lib/postgresql/data
+              subPath: postgres
+          env:
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pg-password
+                  key: PG_PASSWORD
+            - name: POSTGRES_DB
+              value: Products
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: products-postgres-srv
+spec:
+  selector:
+    app: products-postgres
+  ports:
+    - name: db
+      protocol: TCP
+      port: 5432
+      targetPort: 5432

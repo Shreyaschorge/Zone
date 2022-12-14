@@ -1,7 +1,5 @@
 import os
 from app import app
-from db import db
-from ma import ma
 
 if (os.environ.get('PG_USER') is None):
     raise Exception('PG_USER must be defined')
@@ -18,19 +16,8 @@ if (os.environ.get('PG_DATABASE') is None):
 if (os.environ.get('PG_PASSWORD') is None):
     raise Exception('PG_PASSWORD must be defined')
 
-if (os.environ.get('REDIS_URI') is None):
-    raise Exception('REDIS_URI must be defined')
-
 if (os.environ.get('JWT_SECRET_KEY') is None):
     raise Exception('JWT_SECRET_KEY must be defined')
 
-db.init_app(app)
-ma.init_app(app)
-
-
-@app.before_first_request
-def create_tables():
-    db.create_all()
-
-
-app.run(port=3000)
+if __name__ == "__main__":
+    app.run(host='127.0.0.1', port=3000, dev=True)

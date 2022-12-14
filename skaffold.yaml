@@ -16,3 +16,11 @@ build:
         manual:
           - src: "src/**/*.py"
             dest: .
+    - image: shreyaschorge/zone-products
+      context: products
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "src/**/*.py"
+            dest: .

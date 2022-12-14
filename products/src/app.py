@@ -53,6 +53,3 @@ async def catch_anything(request, err):
             'errors': [{'message': 'Something went wrong'}]
         }, status=500)
 
-
-if __name__ == "__main__":
-    app.run(port=5001, auto_reload=True)

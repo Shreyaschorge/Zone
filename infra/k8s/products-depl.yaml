@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: products-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: products
+  template:
+    metadata:
+      labels:
+        app: products
+    spec:
+      containers:
+        - name: products
+          image: shreyaschorge/zone-products
+          env:
+            # - name: REDIS_URI
+            #   value: "redis://redis-srv:6379"
+            - name: JWT_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_SECRET_KEY
+            - name: PG_USER
+              value: postgres
+            - name: PG_HOST
+              value: products-postgres-srv
+            - name: PG_PORT
+              value: "5432"
+            - name: PG_DATABASE
+              value: Products
+            - name: PG_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pg-password
+                  key: PG_PASSWORD
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: products-srv
+spec:
+  selector:
+    app: products
+  ports:
+    - name: products
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

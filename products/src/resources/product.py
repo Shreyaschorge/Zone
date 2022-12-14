@@ -44,7 +44,7 @@ async def single_product(req, uuid):
 async def create_product(req):
     try:
         _product = product_schema.load(req.json)
-        _product["userId"] = req.ctx.current_user['uuid']
+        _product['userId'] = req.ctx.current_user['uuid']
     except ValidationError as err:
         raise RequestValidationException(err)
 
