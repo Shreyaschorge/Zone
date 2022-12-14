@@ -1,7 +1,8 @@
 from sanic import Blueprint, response
 from sqlalchemy.future import select
+from sqlalchemy.orm.exc import NoResultFound
 from marshmallow.exceptions import ValidationError
-from zone_common.exceptions import RequestValidationException
+from zone_common.exceptions import RequestValidationException, NotFoundException, UnauthorizedException, BadRequestException
 
 from models.product import Product
 from schema.product import ProductSchema
@@ -27,10 +28,15 @@ async def all_products(req):
 async def all_products(req, uuid):
     session = req.ctx.session
     q = select(Product).where(Product.uuid == uuid)
-    result = await session.execute(q)
-    all_products = product_schema.dump(
-        result.scalars().one())
-    return response.json(all_products, status=200)
+
+    try:
+        result = await session.execute(q)
+        existing_product = result.scalars().one()
+    except NoResultFound as err:
+        raise NotFoundException()
+
+    product = product_schema.dump(existing_product)
+    return response.json(product, status=200)
 
 
 @product.post("/")
@@ -47,6 +53,36 @@ async def create_product(req):
         product = Product(**_product)
         session.add(product)
     return response.json(product_schema.dump(product.__dict__), status=201)
+
+
+@product.put("/<uuid>")
+@require_auth
+async def update_product(req, uuid):
+    session = req.ctx.session
+    q = select(Product).where(Product.uuid == uuid)
+
+    try:
+        result = await session.execute(q)
+        existing_product = result.scalars().one()
+    except NoResultFound as err:
+        raise NotFoundException()
+
+    if existing_product.userId != req.ctx.current_user['uuid']:
+        raise BadRequestException("Not allowed to update someone's else product")
+
+    try:
+        product = product_schema.load(req.json)
+    except ValidationError as err:
+        raise RequestValidationException(err)
+
+    existing_product.title = product["title"]
+    existing_product.description = product["description"]
+    existing_product.price = product["price"]
+
+    session.add(existing_product)
+    await session.commit()
+
+    return response.json(product_schema.dump(existing_product), status=200)
 
 
 @product.get("/usersProducts")
