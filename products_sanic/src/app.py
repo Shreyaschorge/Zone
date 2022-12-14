@@ -7,6 +7,8 @@ from resources.product import product
 from models.product import Product
 from db import bind, _sessionmaker
 
+from middlewares.current_user import current_user
+
 app = sanic.Sanic(name="product_service")
 app.blueprint(product)
 
@@ -20,7 +22,10 @@ async def bst(app, loop):
 
 
 @app.middleware("request")
-async def inject_session(request):
+async def inject_session_and_verify_user(request):
+
+    current_user(request=request)
+
     request.ctx.session = _sessionmaker()
     request.ctx.session_ctx_token = _base_model_session_ctx.set(
         request.ctx.session)
