@@ -1,4 +1,4 @@
-from sqlalchemy import INTEGER, Column, ForeignKey, String, event
+from sqlalchemy import INTEGER, Column, ForeignKey, String, event, FLOAT
 from sqlalchemy.orm import declarative_base
 from nanoid import generate
 
@@ -10,7 +10,7 @@ class Product(Base):
     id = Column(INTEGER(), primary_key=True)
     uuid = Column(String(), nullable=False)
     title = Column(String(), nullable=False)
-    price = Column(String(), nullable=False)
+    price = Column(FLOAT(), nullable=False)
     description = Column(String(), nullable=False)
     userId = Column(String())
 
