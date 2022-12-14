@@ -1,6 +1,7 @@
 secrets.txt
 
 .vscode
+.kpt-pipeline
 
 # Flask
 instance/
