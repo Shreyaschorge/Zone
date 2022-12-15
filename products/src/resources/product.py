@@ -1,3 +1,4 @@
+import asyncio as aio
 from sanic import Blueprint, response
 from sqlalchemy.future import select
 from sqlalchemy.orm.exc import NoResultFound
@@ -7,6 +8,8 @@ from zone_common.exceptions import RequestValidationException, NotFoundException
 from models.product import Product
 from schema.product import ProductSchema
 from middlewares.require_auth import require_auth
+from events.product_created_publisher import ProductCreatedPublisher
+from natsWrapper import natsWrapper
 
 product = Blueprint(name="product", url_prefix="/api/products")
 
@@ -52,7 +55,11 @@ async def create_product(req):
     async with session.begin():
         product = Product(**_product)
         session.add(product)
-    return response.json(product_schema.dump(product.__dict__), status=201)
+
+    parsedProduct = product_schema.dump(product.__dict__)
+    aio.create_task(ProductCreatedPublisher(
+        natsWrapper.client).publish(parsedProduct))
+    return response.json(parsedProduct, status=201)
 
 
 @product.put("/<uuid>")

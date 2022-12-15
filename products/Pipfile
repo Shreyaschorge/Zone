@@ -12,6 +12,7 @@ sqlalchemy = {extras = ["asyncio"], version = "*"}
 nanoid = "*"
 pyjwt = "*"
 zone-common = "*"
+nats-py = "*"
 
 [dev-packages]
 

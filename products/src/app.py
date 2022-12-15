@@ -1,15 +1,19 @@
 import sanic
+import os
 from sanic import response
 from zone_common.exceptions import CustomException
 from contextvars import ContextVar
+import asyncio as aio
 
 from resources.product import product
 from models.product import Product
 from db import bind, _sessionmaker
 
 from middlewares.current_user import current_user
+from constants import APP_NAME
+from natsWrapper import natsWrapper
 
-app = sanic.Sanic(name="product_service")
+app = sanic.Sanic(name=APP_NAME)
 app.blueprint(product)
 
 _base_model_session_ctx = ContextVar("session")
@@ -17,8 +21,13 @@ _base_model_session_ctx = ContextVar("session")
 
 @app.listener('before_server_start')
 async def bst(app, loop):
-    async with bind.begin() as conn:
-        await conn.run_sync(Product.metadata.create_all)
+    try:
+        await natsWrapper.connect(url=os.environ.get('NATS_URL'))
+
+        async with bind.begin() as conn:
+            await conn.run_sync(Product.metadata.create_all)
+    except Exception as err:
+        print(f'Error : {APP_NAME}', err)
 
 
 @app.middleware("request")
@@ -52,4 +61,3 @@ async def catch_anything(request, err):
         return response.json({
             'errors': [{'message': 'Something went wrong'}]
         }, status=500)
-

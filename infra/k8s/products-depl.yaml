@@ -16,8 +16,8 @@ spec:
         - name: products
           image: shreyaschorge/zone-products
           env:
-            # - name: REDIS_URI
-            #   value: "redis://redis-srv:6379"
+            - name: NATS_URL
+              value: "nats://nats-srv:4222"
             - name: JWT_SECRET_KEY
               valueFrom:
                 secretKeyRef:

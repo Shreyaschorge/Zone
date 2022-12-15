@@ -1,6 +1,9 @@
 import os
 from app import app
 
+if (os.environ.get('NATS_URL') is None):
+    raise Exception('NATS_URL must be defined')
+
 if (os.environ.get('PG_USER') is None):
     raise Exception('PG_USER must be defined')
 
