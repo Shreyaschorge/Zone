@@ -1,19 +1,15 @@
-import os
-import asyncio as aio
 from sanic import Sanic, response
 from zone_common.exceptions import CustomException
 from contextvars import ContextVar
 
-from resources.product import product
-from models.product import Product
 from db import bind, _sessionmaker
+from resources.order import order
+from models.order import Order
 
-from middlewares.current_user import current_user
 from constants import APP_NAME
-from natsWrapper import natsWrapper
 
 app = Sanic(name=APP_NAME)
-app.blueprint(product)
+app.blueprint(order)
 
 _base_model_session_ctx = ContextVar("session")
 
@@ -21,10 +17,8 @@ _base_model_session_ctx = ContextVar("session")
 @app.listener('before_server_start')
 async def bst(app, loop):
     try:
-        await natsWrapper.connect(url=os.environ.get('NATS_URL'))
-
         async with bind.begin() as conn:
-            await conn.run_sync(Product.metadata.create_all)
+            await conn.run_sync(Order.metadata.create_all)
     except Exception as err:
         print(f'Error : {APP_NAME}', err)
 
@@ -32,12 +26,9 @@ async def bst(app, loop):
 @app.middleware("request")
 async def inject_session_and_verify_user(request):
 
-    current_user(request=request)
-
     request.ctx.session = _sessionmaker()
     request.ctx.session_ctx_token = _base_model_session_ctx.set(
         request.ctx.session)
-
 
 @app.middleware("response")
 async def close_session(request, response):
@@ -49,7 +40,7 @@ async def close_session(request, response):
 @app.exception(Exception)
 async def catch_anything(request, err):
 
-    print("product_service error", err, type(err))
+    print("order_service error", err, type(err))
 
     if isinstance(err, CustomException):
         return response.json({

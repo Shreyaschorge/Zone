@@ -1,9 +1,8 @@
-from sqlalchemy import INTEGER, Column, ForeignKey, String, event, FLOAT
+from sqlalchemy import INTEGER, Column, String, event, FLOAT
 from sqlalchemy.orm import declarative_base
 from nanoid import generate
 
 Base = declarative_base()
-
 
 class Product(Base):
     __tablename__ = "products"

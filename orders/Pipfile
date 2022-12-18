@@ -7,12 +7,12 @@ name = "pypi"
 sanic = "*"
 nats-py = "*"
 zone-common = "*"
-sqlalchemy = {extras = ["async"], version = "*"}
 marshmallow = "*"
 asyncpg = "*"
 pyjwt = "*"
 nanoid = "*"
 aiosqlite = "*"
+sqlalchemy = {extras = ["asyncio"], version = "*"}
 
 [dev-packages]
 
