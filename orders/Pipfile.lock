@@ -423,6 +423,7 @@
                 "sha256:fd69850860093a3f69fefe0ab56d041edfdfe18510b53d9a2eaecba2f15fa795"
             ],
             "index": "pypi",
+            "markers": null,
             "version": "==1.4.45"
         },
         "typing-extensions": {
@@ -625,11 +626,11 @@
         },
         "zone-common": {
             "hashes": [
-                "sha256:06d1dd7ecb507831bd0cb7e3068e5584be7f9444bd6bc8954abac0ad37987d59",
-                "sha256:8e698394b3a839b5b947d41f70eb3553e44c813182edec6b33ccce43829a0d5c"
+                "sha256:7a9c591930fcb020bac16fd4266463e3b637c74f0841248a0fe4a092965980ff",
+                "sha256:c8110aac7de8924b315452d2cacf3861f8849441acd8a4e330c453eac2310901"
             ],
             "index": "pypi",
-            "version": "==0.0.12"
+            "version": "==0.0.13"
         }
     },
     "develop": {}

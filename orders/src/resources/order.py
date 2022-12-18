@@ -1,9 +1,10 @@
 from sanic import Blueprint, response
-from sqlalchemy import select
 from marshmallow.exceptions import ValidationError
-from zone_common.exceptions import RequestValidationException
+from zone_common.exceptions import RequestValidationException, NotFoundException
+from sqlalchemy.future import select
 
 from models.order import Order
+from models.product import Product
 from schema.order import OrderSchema
 
 order = Blueprint(name="order", url_prefix="/api/orders")
@@ -25,16 +26,27 @@ async def all_orders(req):
 @order.post('/')
 async def create_order(req):
 
+    session = req.ctx.session
+
     try:
         payload = order_schema.load(req.json)
     except ValidationError as err:
         raise RequestValidationException(err)
 
-    print('\n\n', payload, '\n\n')
+    q = select(Product).filter(Product.uuid.in_(
+        e for e in payload["products"]))
 
-    session = req.ctx.session
-    async with session.begin():
-        order = Order(**payload)
-        session.add(order)
+    try:
+        result = await session.execute(q)
+        existing_products = result.scalars().all()
+    except Exception as err:
+        raise Exception("Something went wrong", err)
+
+    if len(existing_products) != len(payload["products"]):
+        raise NotFoundException()
+
+    order = Order(products=existing_products)
+    session.add(order)
+    await session.commit()
 
     return response.json({"message": "Order is created"})

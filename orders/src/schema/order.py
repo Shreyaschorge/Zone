@@ -11,8 +11,6 @@ class ProductIdField(fields.Field):
         if value is None:
             return None
 
-        print('\n\n', value, '\n\n')
-
         matched = re.match("product_.{30}$", value)
 
         if not bool(matched):
@@ -24,7 +22,7 @@ class ProductIdField(fields.Field):
 class OrderSchema(Schema):
 
     id = fields.Int()
-    productId = ProductIdField(required=True)
+    products = fields.List(ProductIdField(required=True))
     uuid = fields.String()
 
     class Meta:

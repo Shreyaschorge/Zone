@@ -1,5 +1,7 @@
 secrets.txt
 
+*.sql
+
 .vscode
 .kpt-pipeline
 

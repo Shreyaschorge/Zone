@@ -5,6 +5,7 @@ from contextvars import ContextVar
 from db import bind, _sessionmaker
 from resources.order import order
 from models.order import Order
+from models.product import Product
 
 from constants import APP_NAME
 
@@ -19,6 +20,7 @@ async def bst(app, loop):
     try:
         async with bind.begin() as conn:
             await conn.run_sync(Order.metadata.create_all)
+            await conn.run_sync(Product.metadata.create_all)
     except Exception as err:
         print(f'Error : {APP_NAME}', err)
 
@@ -29,6 +31,7 @@ async def inject_session_and_verify_user(request):
     request.ctx.session = _sessionmaker()
     request.ctx.session_ctx_token = _base_model_session_ctx.set(
         request.ctx.session)
+
 
 @app.middleware("response")
 async def close_session(request, response):

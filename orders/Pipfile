@@ -6,13 +6,13 @@ name = "pypi"
 [packages]
 sanic = "*"
 nats-py = "*"
-zone-common = "*"
 marshmallow = "*"
 asyncpg = "*"
 pyjwt = "*"
 nanoid = "*"
 aiosqlite = "*"
 sqlalchemy = {extras = ["asyncio"], version = "*"}
+zone-common = "*"
 
 [dev-packages]
 
