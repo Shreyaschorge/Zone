@@ -4,6 +4,15 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+sanic = "*"
+nats-py = "*"
+zone-common = "*"
+sqlalchemy = {extras = ["async"], version = "*"}
+marshmallow = "*"
+asyncpg = "*"
+pyjwt = "*"
+nanoid = "*"
+aiosqlite = "*"
 
 [dev-packages]
 
