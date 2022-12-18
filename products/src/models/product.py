@@ -13,6 +13,9 @@ class Product(Base):
     price = Column(FLOAT(), nullable=False)
     description = Column(String(), nullable=False)
     userId = Column(String())
+    version_id = Column(INTEGER(), nullable=False)
+
+    __mapper_args__ = {"version_id_col": version_id}
 
 
 def add_uuid(mapper, connect, target):
