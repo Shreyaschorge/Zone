@@ -4,6 +4,7 @@ from nanoid import generate
 
 Base = declarative_base()
 
+
 class Product(Base):
     __tablename__ = "products"
     id = Column(INTEGER(), primary_key=True)
@@ -12,9 +13,9 @@ class Product(Base):
     price = Column(FLOAT(), nullable=False)
     description = Column(String(), nullable=False)
     userId = Column(String())
-    version_id = Column(INTEGER(), nullable=False)
+    versionId = Column(INTEGER(), nullable=False)
 
-    __mapper_args__ = {"version_id_col": version_id}
+    __mapper_args__ = {"version_id_col": versionId}
 
 
 def add_uuid(mapper, connect, target):
