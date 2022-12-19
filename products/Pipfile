@@ -11,8 +11,8 @@ aiosqlite = "*"
 sqlalchemy = {extras = ["asyncio"], version = "*"}
 nanoid = "*"
 pyjwt = "*"
-zone-common = "*"
 nats-py = "*"
+zone-common = "*"
 
 [dev-packages]
 

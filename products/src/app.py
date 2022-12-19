@@ -2,13 +2,13 @@ import os
 import asyncio as aio
 from sanic import Sanic, response
 from zone_common.exceptions import CustomException
+from zone_common.middlewares.current_user import current_user
 from contextvars import ContextVar
 
 from resources.product import product
 from models.product import Product
 from db import bind, _sessionmaker
 
-from middlewares.current_user import current_user
 from constants import APP_NAME
 from natsWrapper import natsWrapper
 

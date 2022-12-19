@@ -4,10 +4,10 @@ from sqlalchemy.future import select
 from sqlalchemy.orm.exc import NoResultFound
 from marshmallow.exceptions import ValidationError
 from zone_common.exceptions import RequestValidationException, NotFoundException, UnauthorizedException, BadRequestException
+from zone_common.middlewares.require_auth import require_auth
 
 from models.product import Product
 from schema.product import ProductSchema
-from middlewares.require_auth import require_auth
 from events.product_created_publisher import ProductCreatedPublisher
 from natsWrapper import natsWrapper
 
