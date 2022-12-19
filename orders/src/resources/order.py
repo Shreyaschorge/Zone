@@ -2,6 +2,7 @@ from sanic import Blueprint, response
 from marshmallow.exceptions import ValidationError
 from zone_common.exceptions import RequestValidationException, NotFoundException
 from sqlalchemy.future import select
+from sqlalchemy.orm import selectinload
 
 from models.order import Order
 from models.product import Product
@@ -16,11 +17,12 @@ order_schema = OrderSchema()
 async def all_orders(req):
     session = req.ctx.session
     async with session.begin():
-        q = select(Order)
+        q = select(Order).options(
+            selectinload(Order.products))
         result = await session.execute(q)
-        all_orders = result.scalars()
+        all_orders = result.scalars().all()
 
-        return response.json([order.to_json() for order in all_orders])
+    return response.json([order.to_dict() for order in all_orders])
 
 
 @order.post('/')
