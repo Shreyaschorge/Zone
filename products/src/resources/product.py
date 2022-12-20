@@ -18,7 +18,7 @@ product_list_schema = ProductSchema(many=True)
 
 
 @product.get('/')
-async def all_products(req):
+async def all_products(req): #TODO - except user's own product
     session = req.ctx.session
     q = select(Product)
     result = await session.execute(q)

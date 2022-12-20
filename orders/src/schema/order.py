@@ -23,8 +23,9 @@ class OrderSchema(Schema):
 
     id = fields.Int()
     products = fields.List(ProductIdField(required=True))
+    status = fields.String()
     uuid = fields.String()
 
     class Meta:
-        load_only = ("id",)
+        load_only = ("id", "products")
         dump_only = ("id",)

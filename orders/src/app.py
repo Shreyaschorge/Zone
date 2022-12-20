@@ -1,5 +1,6 @@
 from sanic import Sanic, response
 from zone_common.exceptions import CustomException
+from zone_common.middlewares.current_user import current_user
 from contextvars import ContextVar
 
 from db import bind, _sessionmaker
@@ -27,6 +28,8 @@ async def bst(app, loop):
 
 @app.middleware("request")
 async def inject_session_and_verify_user(request):
+
+    current_user(request=request)
 
     request.ctx.session = _sessionmaker()
     request.ctx.session_ctx_token = _base_model_session_ctx.set(

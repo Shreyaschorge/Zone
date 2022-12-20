@@ -13,6 +13,7 @@ nanoid = "*"
 aiosqlite = "*"
 sqlalchemy = {extras = ["asyncio"], version = "*"}
 zone-common = "*"
+python-decouple = "*"
 
 [dev-packages]
 

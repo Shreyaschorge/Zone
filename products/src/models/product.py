@@ -12,7 +12,7 @@ class Product(Base):
     title = Column(String(), nullable=False)
     price = Column(FLOAT(), nullable=False)
     description = Column(String(), nullable=False)
-    userId = Column(String())
+    userId = Column(String(), nullable=False)
     version_id = Column(INTEGER(), nullable=False)
 
     __mapper_args__ = {"version_id_col": version_id}
