@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orders-postgres-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orders-postgres
+  template:
+    metadata:
+      labels:
+        app: orders-postgres
+    spec:
+      volumes:
+        - name: orders-pg-volume
+          persistentVolumeClaim:
+            claimName: orders-pg-volume-claim
+      containers:
+        - name: orders-postgres
+          image: postgres:11-alpine
+          volumeMounts:
+            - name: orders-pg-volume
+              mountPath: /var/lib/postgresql/data
+              subPath: postgres
+          env:
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pg-password
+                  key: PG_PASSWORD
+            - name: POSTGRES_DB
+              value: Orders
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orders-postgres-srv
+spec:
+  selector:
+    app: orders-postgres
+  ports:
+    - name: db
+      protocol: TCP
+      port: 5432
+      targetPort: 5432

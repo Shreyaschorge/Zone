@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, INTEGER, event, Table, ForeignKey, FLOAT
+from sqlalchemy import Column, String, INTEGER, event, Table, ForeignKey, FLOAT, Integer
 from sqlalchemy.orm import relationship
 from nanoid import generate
 from zone_common.events.order_status import OrderStatus
@@ -9,6 +9,7 @@ from .base import Base
 product_schema = ProductSchema(many=True)
 
 order_product = Table("order_product", Base.metadata,
+                      Column("id", Integer, primary_key=True),
                       Column("orderId", ForeignKey("orders.uuid")),
                       Column("productId", ForeignKey("products.uuid"))
                       )
@@ -16,8 +17,7 @@ order_product = Table("order_product", Base.metadata,
 
 class Order(Base):
     __tablename__ = "orders"
-    id = Column(INTEGER(), primary_key=True)
-    uuid = Column(String(), nullable=False)
+    uuid = Column(String(), primary_key=True)
     userId = Column(String(), nullable=False)
     status = Column(String(), nullable=False, default=OrderStatus.Draft)
     version_id = Column(INTEGER(), nullable=False)

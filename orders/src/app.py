@@ -1,5 +1,5 @@
-from sanic import Sanic, response
 import asyncio as aio
+from sanic import Sanic, response
 from zone_common.exceptions import CustomException
 from zone_common.middlewares.current_user import current_user
 from contextvars import ContextVar
@@ -27,13 +27,14 @@ async def bst(app, loop):
         await natsWrapper.connect(url=NATS_URL)
 
         async with bind.begin() as conn:
-            await conn.run_sync(Order.metadata.create_all)
             await conn.run_sync(Product.metadata.create_all)
+            await conn.run_sync(Order.metadata.create_all)
+            await conn.commit()
 
         aio.create_task(ProductCreatedListner(natsWrapper.client).listen())
-        aio.create_task(ProductUpdatedListner(natsWrapper.client).listen())
+        # aio.create_task(ProductUpdatedListner(natsWrapper.client).listen())
     except Exception as err:
-        print(f'Error : {APP_NAME}', err)
+        print(f'Error => : {APP_NAME}', err)
 
 
 @app.middleware("request")

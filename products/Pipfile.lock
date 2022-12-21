@@ -625,11 +625,11 @@
         },
         "zone-common": {
             "hashes": [
-                "sha256:4c595df23f3eccc2cff9325fcd47db50cf63c5d7f721fe426e2c06394e12b165",
-                "sha256:a71d2f0259b0ad0cf0b9e86340acc136e29f83f45030d24387ebe21331dd35fc"
+                "sha256:77a1678a5b91d1fa45a95e6d9df4840babc49a70bcca02225e85b0b8c7a7b272",
+                "sha256:e71e893bfa647530ebb82b0ef1e563fb9ba2c6409879b1986ba5f1d67411128f"
             ],
             "index": "pypi",
-            "version": "==0.0.15"
+            "version": "==0.0.16"
         }
     },
     "develop": {}

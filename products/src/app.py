@@ -1,4 +1,3 @@
-import os
 import asyncio as aio
 from sanic import Sanic, response
 from zone_common.exceptions import CustomException
@@ -8,9 +7,10 @@ from contextvars import ContextVar
 from resources.product import product
 from models.product import Product
 from db import bind, _sessionmaker
+from natsWrapper import natsWrapper
 
 from constants import APP_NAME
-from natsWrapper import natsWrapper
+from keys import NATS_URL
 
 app = Sanic(name=APP_NAME)
 app.blueprint(product)
@@ -21,7 +21,7 @@ _base_model_session_ctx = ContextVar("session")
 @app.listener('before_server_start')
 async def bst(app, loop):
     try:
-        await natsWrapper.connect(url=os.environ.get('NATS_URL'))
+        await natsWrapper.connect(url=NATS_URL)
 
         async with bind.begin() as conn:
             await conn.run_sync(Product.metadata.create_all)

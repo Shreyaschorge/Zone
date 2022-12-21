@@ -11,8 +11,7 @@ order_schema = OrderSchema(many=True)
 
 class Product(Base):
     __tablename__ = "products"
-    id = Column(INTEGER(), primary_key=True)
-    uuid = Column(String(), nullable=False)
+    uuid = Column(String(), primary_key=True)
     title = Column(String(), nullable=False)
     price = Column(FLOAT(), nullable=False)
     description = Column(String(), nullable=False)

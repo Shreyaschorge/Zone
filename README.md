@@ -18,3 +18,5 @@ TODO - KILL the app if pg-depl isn't stable
 TODO - Begin transaction while executing a query in product service (put req)
 
 TODO - Test consistency of data (Write a script to verify it)
+
+TODO - durable consumer name for each listener

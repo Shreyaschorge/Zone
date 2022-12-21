@@ -16,8 +16,8 @@ spec:
         - name: nats
           image: nats
           volumeMounts:
-            - mountPath: "/tmp/nats"
-              name: jetstream-volume
+            - name: jetstream-volume
+              mountPath: "/tmp/nats"
           args: ["-p", "4222", "-m", "8222", "-js"]
       volumes:
         - name: jetstream-volume

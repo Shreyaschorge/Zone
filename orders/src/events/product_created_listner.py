@@ -19,8 +19,8 @@ class ProductCreatedListner(Listener):
         try:
             async with session.begin():
                 product = Product(**data)
-                session.add()
-            await msg.ack()
+                session.add(product)
+                await msg.ack()
 
         except Exception as err:
             raise Exception(err)

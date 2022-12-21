@@ -23,4 +23,4 @@ if (os.environ.get('JWT_SECRET_KEY') is None):
     raise Exception('JWT_SECRET_KEY must be defined')
 
 if __name__ == "__main__":
-    app.run(host='127.0.0.1', port=3000, dev=True)
+    app.run(host='127.0.0.1', port=3000, dev=True, auto_reload=True)
