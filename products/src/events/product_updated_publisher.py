@@ -3,7 +3,7 @@ from zone_common.events.subjects import Subjects
 from nats.aio.client import Client as NATS
 
 
-class ProductCreatedPublisher(Publisher):
+class ProductUpdatedPublisher(Publisher):
     subject = Subjects.ProductUpdated
 
     def __init__(self, client):

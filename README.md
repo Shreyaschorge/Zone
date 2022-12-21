@@ -15,6 +15,6 @@ TODO - Handle SIGINT and SIGTERM appropriately to drain the connection[https://s
 
 TODO - KILL the app if pg-depl isn't stable
 
-TODO - Begin transaction while executing a query in product service
+TODO - Begin transaction while executing a query in product service (put req)
 
 TODO - Test consistency of data (Write a script to verify it)

@@ -2,6 +2,7 @@ import asyncio as aio
 from sanic import Blueprint, response
 from sqlalchemy.future import select
 from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.sql import not_
 from marshmallow.exceptions import ValidationError
 from zone_common.exceptions import RequestValidationException, NotFoundException, UnauthorizedException, BadRequestException
 from zone_common.middlewares.require_auth import require_auth
@@ -9,6 +10,7 @@ from zone_common.middlewares.require_auth import require_auth
 from models.product import Product
 from schema.product import ProductSchema
 from events.product_created_publisher import ProductCreatedPublisher
+from events.product_updated_publisher import ProductUpdatedPublisher
 from natsWrapper import natsWrapper
 
 product = Blueprint(name="product", url_prefix="/api/products")
@@ -18,9 +20,12 @@ product_list_schema = ProductSchema(many=True)
 
 
 @product.get('/')
-async def all_products(req): #TODO - except user's own product
+@require_auth
+async def all_products(req):
     session = req.ctx.session
-    q = select(Product)
+    userId = req.ctx.current_user["uuid"]
+
+    q = select(Product).filter(not_(Product.uuid == userId))
     result = await session.execute(q)
     all_products = product_list_schema.dump(
         result.scalars())
@@ -89,6 +94,15 @@ async def update_product(req, uuid):
 
     session.add(existing_product)
     await session.commit()
+
+    aio.create_task(ProductUpdatedPublisher(natsWrapper.client).publish({
+        "title": existing_product.title,
+        "uuid": existing_product.uuid,
+        "userId": existing_product.userId,
+        "description": existing_product.description,
+        "price": existing_product.price,
+        "version_id": existing_product.version_id
+    }))
 
     return response.json(product_schema.dump(existing_product), status=200)
 

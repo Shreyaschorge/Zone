@@ -1,0 +1,1 @@
+queueGroupName = "orders-service"
