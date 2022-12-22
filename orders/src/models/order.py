@@ -28,7 +28,7 @@ class Order(Base):
     __mapper_args__ = {"version_id_col": version_id}
 
     def to_dict(self):
-        return {"uuid": self.uuid, "userId": self.userId, "products": product_schema.dump(self.products)}
+        return {"uuid": self.uuid, "userId": self.userId, "status": self.status, "products": product_schema.dump(self.products)}
 
 
 def add_uuid(mapper, connect, target):

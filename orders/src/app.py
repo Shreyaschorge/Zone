@@ -32,7 +32,7 @@ async def bst(app, loop):
             await conn.commit()
 
         aio.create_task(ProductCreatedListner(natsWrapper.client).listen())
-        # aio.create_task(ProductUpdatedListner(natsWrapper.client).listen())
+        aio.create_task(ProductUpdatedListner(natsWrapper.client).listen())
     except Exception as err:
         print(f'Error => : {APP_NAME}', err)
 

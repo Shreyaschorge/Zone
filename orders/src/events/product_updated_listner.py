@@ -8,12 +8,12 @@ from sqlalchemy.future import select
 from zone_common.events.base_listener import Listener
 from db import _sessionmaker
 from models.product import Product
-from .queue_group_name import queueGroupName
+from .queue_group_name import QueueGroupName
 
 
 class ProductUpdatedListner(Listener):
     subject = Subjects.ProductUpdated
-    queueGroupName = queueGroupName
+    queueGroupName = QueueGroupName.ProductUpdatedListener
 
     def __init__(self, client):
         super().__init__(client=client)
@@ -21,10 +21,11 @@ class ProductUpdatedListner(Listener):
     async def onMessage(self, data, msg):
         session = _sessionmaker()
         try:
-            q = select(Product).where(and_(Product.uuid == data["uuid"], Product.version_id == data["version_id"] - 1))
+            q = select(Product).where(
+                and_(Product.uuid == data["uuid"], Product.version_id == data["version_id"] - 1))
             try:
                 result = await session.execute(q)
-                existing_product = result.scalars().one()     
+                existing_product = result.scalars().one()
             except NoResultFound as err:
                 raise NotFoundException()
             existing_product.title = data["title"]

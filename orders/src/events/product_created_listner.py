@@ -4,12 +4,12 @@ from zone_common.events.subjects import Subjects
 from zone_common.events.base_listener import Listener
 from db import _sessionmaker
 from models.product import Product
-from .queue_group_name import queueGroupName
+from .queue_group_name import QueueGroupName
 
 
 class ProductCreatedListner(Listener):
     subject = Subjects.ProductCreated
-    queueGroupName = queueGroupName
+    queueGroupName = QueueGroupName.ProductCreatedListener
 
     def __init__(self, client):
         super().__init__(client=client)
