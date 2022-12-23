@@ -6,7 +6,8 @@ from zone_common.exceptions import RequestValidationException, NotFoundException
 from zone_common.middlewares.require_auth import require_auth
 from zone_common.events.order_status import OrderStatus
 from sqlalchemy.future import select
-from sqlalchemy.orm import selectinload
+from sqlalchemy.orm import selectinload, joinedload, subqueryload
+from sqlalchemy.sql.expression import column
 
 from models.order import Order, order_product
 from models.product import Product
@@ -105,3 +106,29 @@ async def cancel_order(req, uuid):
         await session.execute('UPDATE orders SET status=:status WHERE uuid=:uuid', {'status': OrderStatus.Cancelled, 'uuid': uuid})
 
     return response.json({"message": "Order is been cancelled"}, status=200)
+
+
+@order.get("/sellerPaidOrders")
+@require_auth
+async def get_sellers_paid_products(req):
+    session = req.ctx.session
+    current_user = req.ctx.current_user
+
+    q = select(Order).select_from(
+        Order.__table__.outerjoin(
+            order_product, order_product.c.orderId == Order.uuid
+        ).outerjoin(
+            Product, Product.uuid == order_product.c.productId
+        )
+    ).where(
+        Product.userId == current_user["uuid"],
+        Order.status == OrderStatus.Complete
+    ).options(
+        subqueryload(Order.products)
+    ).group_by(Order.uuid)
+
+    async with session.begin():
+        result = await session.execute(q)
+        paidOrders = result.all()
+
+    return response.json([order[0].to_dict() for order in paidOrders], status=200)
