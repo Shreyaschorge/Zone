@@ -20,3 +20,5 @@ TODO - Begin transaction while executing a query in product service (put req)
 TODO - Test consistency of data (Write a script to verify it)
 
 TODO - durable consumer name for each listener
+
+TODO - Convert this application to an on-demand C2C.
