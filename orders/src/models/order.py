@@ -8,12 +8,6 @@ from .base import Base
 
 product_schema = ProductSchema(many=True)
 
-order_product = Table("order_product", Base.metadata,
-                      Column("id", Integer, primary_key=True),
-                      Column("orderId", ForeignKey("orders.uuid")),
-                      Column("productId", ForeignKey("products.uuid"))
-                      )
-
 
 class Order(Base):
     __tablename__ = "orders"
@@ -23,12 +17,22 @@ class Order(Base):
     version_id = Column(INTEGER(), nullable=False)
 
     products = relationship(
-        "Product", secondary=order_product, back_populates='orders')
+        "Product", secondary="order_products", back_populates='orders')
+
+    order_products = relationship(
+        "OrderProduct", back_populates="order")
 
     __mapper_args__ = {"version_id_col": version_id}
 
     def to_dict(self):
-        return {"uuid": self.uuid, "userId": self.userId, "status": self.status, "products": product_schema.dump(self.products)}
+        return {"uuid": self.uuid, "userId": self.userId, "status": self.status, "products": [{
+            "title": product.title,
+            "price": product.price,
+            "description": product.description,
+            "uuid": product.uuid,
+            "userId": product.userId,
+            "quantity": product.order_products.quantity
+        } for product in self.products]}
 
 
 def add_uuid(mapper, connect, target):

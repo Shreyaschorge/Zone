@@ -1,10 +1,8 @@
-from sqlalchemy import INTEGER, Column, String, event, FLOAT
-from nanoid import generate
+from sqlalchemy import INTEGER, Column, String, FLOAT
 from sqlalchemy.orm import relationship
 
 from .base import Base
 from schema.order import OrderSchema
-from models.order import order_product
 
 order_schema = OrderSchema(many=True)
 
@@ -19,7 +17,10 @@ class Product(Base):
     version_id = Column(INTEGER(), nullable=False)
 
     orders = relationship(
-        "Order", secondary=order_product, back_populates='products')
+        "Order", secondary="order_products", back_populates='products')
+
+    order_products = relationship(
+        "OrderProduct", back_populates="product", uselist=False)
 
     def to_dict(self):
         return {"uuid": self.uuid, "title": self.title, "price": self.price, "description": self.description, "userId": self.userId, "orders": order_schema.dump(self.orders)}

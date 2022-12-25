@@ -9,6 +9,7 @@ class ProductSchema(Schema):
     description = fields.Str()
     uuid = fields.Str()
     userId = fields.Str()
+    quantity = fields.Int()
 
     class Meta:
         load_only = ("id",)

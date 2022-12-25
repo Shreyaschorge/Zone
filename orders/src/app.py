@@ -8,6 +8,7 @@ from db import bind, _sessionmaker
 from resources.order import order
 from models.order import Order
 from models.product import Product
+from models.order_products import OrderProduct
 from events.product_created_listner import ProductCreatedListner
 from events.product_updated_listner import ProductUpdatedListner
 from natsWrapper import natsWrapper
@@ -29,6 +30,7 @@ async def bst(app, loop):
         async with bind.begin() as conn:
             await conn.run_sync(Product.metadata.create_all)
             await conn.run_sync(Order.metadata.create_all)
+            await conn.run_sync(OrderProduct.metadata.create_all)
             await conn.commit()
 
         aio.create_task(ProductCreatedListner(natsWrapper.client).listen())
