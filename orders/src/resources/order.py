@@ -82,7 +82,7 @@ async def create_order(req):
         if len(existing_products) != len(payload):
             raise NotFoundException()
 
-        order = Order(products=existing_products)
+        order = Order()
         order.userId = current_user["uuid"]
         session.add(order)
 
