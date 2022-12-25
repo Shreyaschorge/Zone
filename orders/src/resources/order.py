@@ -97,6 +97,8 @@ async def create_order(req):
 
         await session.commit()
 
+        # Publish order created event
+
     return response.json({"message": "Order is been created"}, status=201)
 
 
@@ -122,6 +124,8 @@ async def cancel_order(req, uuid):
 
         await session.execute('UPDATE orders SET status=:status WHERE uuid=:uuid', {'status': OrderStatus.Cancelled, 'uuid': uuid})
 
+    #  Publish order cancalled event
+
     return response.json({"message": "Order is been cancelled"}, status=200)
 
 
@@ -141,23 +145,9 @@ async def get_sellers_paid_products(req):
 
     result = await session.execute(q)
 
-    # result = await session.execute('SELECT products.uuid AS products_uuid, products.title AS products_title, products.price AS products_price, products.description AS products_description, products."userId" AS "products_userId", products.version_id AS products_version_id, anon_1.orders_uuid AS anon_1_orders_uuid \
-    #     FROM (SELECT orders.uuid AS orders_uuid \
-    #     FROM orders JOIN order_products ON orders.uuid = order_products."orderId" \
-    #     JOIN products ON products.uuid = order_products."productId" \
-    #     WHERE orders.status = :status\
-    #     GROUP BY orders.uuid) AS anon_1 \
-    #     JOIN order_products AS order_products_1 ON anon_1.orders_uuid = order_products_1."orderId" \
-    #     JOIN products ON products.uuid = order_products_1."productId"\
-    #     WHERE products."userId" = :userId ', {"status": OrderStatus.Complete, "userId": current_user['uuid']})
-
     _paidOrders = result.all()
 
-    print('\n\n', _paidOrders, '\n\n')
-
     res = [order[0].to_dict() for order in _paidOrders]
-
-    print('\n\n', res, '\n\n')
 
     def filterOrders(order):
         _order = {}
@@ -171,23 +161,3 @@ async def get_sellers_paid_products(req):
     paidOrders = list(map(filterOrders, res))
 
     return response.json(paidOrders, status=200)
-
-
-@order.get("/sellerPaidOrderss")
-@require_auth
-async def get_sellers_paid_productss(req):
-    session = req.ctx.session
-    current_user = req.ctx.current_user
-
-    result = await session.execute('\
-        SELECT o.*, p.*, op.quantity \
-        FROM orders o \
-        JOIN order_products op ON o.uuid = op.orderId \
-        JOIN products p ON op.productId = p.uuid \
-        WHERE p.userId = :userId AND o.status = :status \
-    ', {"userId": current_user["uuid"], "status": OrderStatus.Complete})
-    _paidOrders = result.all()
-
-    print('\n\n', _paidOrders, '\n\n')
-
-    return response.json({"res": "done"})
