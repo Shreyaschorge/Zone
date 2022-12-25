@@ -1,4 +1,4 @@
-from sanic import Sanic
+from sanic import Sanic, response
 from contextvars import ContextVar
 from zone_common.middlewares.current_user import current_user
 from zone_common.exceptions import CustomException
@@ -14,6 +14,7 @@ app = Sanic(name=APP_NAME)
 app.blueprint(payment)
 
 _base_model_session_ctx = ContextVar("session")
+
 
 @app.listener('before_server_start')
 async def before_start(app, loop):
@@ -43,6 +44,7 @@ async def close_session(request, response):
     if hasattr(request.ctx, "session_ctx_token"):
         _base_model_session_ctx.reset(request.ctx.session_ctx_token)
         await request.ctx.session.close()
+
 
 @app.exception(Exception)
 async def catch_anything(request, err):

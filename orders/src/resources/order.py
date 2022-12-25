@@ -12,13 +12,8 @@ from sqlalchemy.sql.expression import column, and_
 from models.order_products import OrderProduct
 from models.order import Order
 from models.product import Product
-from schema.order import OrderSchema
-from schema.product import ProductSchema
 
 order = Blueprint(name="order", url_prefix="/api/orders")
-
-order_schema = OrderSchema()
-list_product_schema = ProductSchema(many=True)
 
 
 @order.get('/')

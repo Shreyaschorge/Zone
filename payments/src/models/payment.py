@@ -1,5 +1,6 @@
 from sqlalchemy import Column, String, Float, ForeignKey, event
 from sqlalchemy.orm import relationship
+from nanoid import generate
 
 from .base import Base
 

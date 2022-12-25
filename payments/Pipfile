@@ -12,6 +12,7 @@ nanoid = "*"
 aiosqlite = "*"
 sqlalchemy = {extras = ["asyncio"], version = "*"}
 python-decouple = "*"
+stripe = "*"
 
 [dev-packages]
 

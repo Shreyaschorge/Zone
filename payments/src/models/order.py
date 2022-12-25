@@ -9,6 +9,7 @@ class Order(Base):
     uuid = Column(String(), primary_key=True)
     price = Column(Float(), nullable=False)
     userId = Column(String(), nullable=False)
+    status = Column(String(), nullable=False)
     version_id = Column(Integer(), nullable=False)
 
     payment = relationship("Payment", uselist=False, back_populates="order")
