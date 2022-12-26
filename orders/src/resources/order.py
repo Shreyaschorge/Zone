@@ -1,4 +1,4 @@
-import os
+import asyncio as aio
 from sanic import Blueprint, response
 from marshmallow.exceptions import ValidationError
 from sqlalchemy.orm.exc import NoResultFound
@@ -12,6 +12,9 @@ from sqlalchemy.sql.expression import column, and_
 from models.order_products import OrderProduct
 from models.order import Order
 from models.product import Product
+from events.order_created_publisher import OrderCreatedPublisher
+from events.order_cancelled_publisher import OrderCancelledPublisher
+from natsWrapper import natsWrapper
 
 order = Blueprint(name="order", url_prefix="/api/orders")
 
@@ -56,6 +59,7 @@ async def create_order(req):
     session = req.ctx.session
     current_user = req.ctx.current_user
     payload = req.json
+    total_price = 0
 
     def getProductQuantity(product):
         quantity = None
@@ -84,6 +88,7 @@ async def create_order(req):
         order_products = []
 
         for product in existing_products:
+            total_price = total_price + product.price
             order_products.append(OrderProduct(
                 order=order, product=product, quantity=getProductQuantity(product)))
 
@@ -92,7 +97,15 @@ async def create_order(req):
 
         await session.commit()
 
-        # Publish order created event
+    # Build order to be published
+    _order = {
+        "uuid": order.uuid,
+        "price": total_price,
+        "userId": order.userId,
+        "status": order.status
+    }
+    # Publish order created event
+    aio.create_task(OrderCreatedPublisher(natsWrapper.client).publish(_order))
 
     return response.json({"message": "Order is been created"}, status=201)
 
@@ -117,9 +130,16 @@ async def cancel_order(req, uuid):
         if existing_order.status == OrderStatus.Completed:
             raise BadRequestException("Cannot cancel a completed order")
 
-        await session.execute('UPDATE orders SET status=:status WHERE uuid=:uuid', {'status': OrderStatus.Cancelled, 'uuid': uuid})
+        existing_order.status = OrderStatus.Cancelled
+        session.add(existing_order)
+        await session.commit()
 
     #  Publish order cancalled event
+    aio.create_task(OrderCancelledPublisher(
+        natsWrapper.client).publish({
+            "uuid": existing_order.uuid,
+            "version_id": existing_order.version_id
+        }))
 
     return response.json({"message": "Order is been cancelled"}, status=200)
 

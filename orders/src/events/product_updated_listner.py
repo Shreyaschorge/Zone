@@ -1,10 +1,10 @@
+from zone_common.events.base_listener import Listener
 from zone_common.events.subjects import Subjects
 from zone_common.exceptions.not_found_exception import NotFoundException
 from sqlalchemy import and_
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.future import select
 
-from zone_common.events.base_listener import Listener
 from db import _sessionmaker
 from models.product import Product
 from .queue_group_name import QueueGroupName

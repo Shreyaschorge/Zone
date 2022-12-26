@@ -1,3 +1,3 @@
 class QueueGroupName:
-    OrderCreatedListener = "order_created_listeners"
-    OrderCancelledListener = "order_cancelled_listeners"
+    OrderCreatedListeners = "order_created_listeners"
+    OrderCancelledListeners = "order_cancelled_listeners"

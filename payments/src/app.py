@@ -1,4 +1,4 @@
-
+import asyncio as aio
 from sanic import Sanic, response
 from contextvars import ContextVar
 from zone_common.middlewares.current_user import current_user
@@ -8,6 +8,8 @@ from db import bind, _sessionmaker
 from models.order import Order
 from models.payment import Payment
 from resources.payment import payment
+from events.order_created_listener import OrderCreatedListener
+from events.order_cancelled_listener import OrderCancelledListener
 from natsWrapper import natsWrapper
 
 from constants import APP_NAME
@@ -29,6 +31,9 @@ async def before_start(app, loop):
             await conn.run_sync(Order.metadata.create_all)
             await conn.run_sync(Payment.metadata.create_all)
             await conn.commit()
+
+        aio.create_task(OrderCreatedListener(natsWrapper.client).listen())
+        aio.create_task(OrderCancelledListener(natsWrapper.client).listen())
 
     except Exception as err:
         print(f'Error => : {APP_NAME}', err)
