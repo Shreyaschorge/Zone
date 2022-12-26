@@ -1,3 +1,4 @@
 class QueueGroupName:
-    ProductCreatedListener = "product_created_listener"
-    ProductUpdatedListener = "product_updated_listener"
+    ProductCreatedListeners = "product_created_listeners"
+    ProductUpdatedListeners = "product_updated_listeners"
+    PaymentCreatedListeners = "payment_created_listeners"

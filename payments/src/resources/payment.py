@@ -9,11 +9,12 @@ from sqlalchemy.future import select
 from models.order import Order
 from models.payment import Payment
 from schema.payment import PaymentSchema
-from stripeWrapper import stripe
+from stripeClient import stripe
 
 payment = Blueprint(name="payment", url_prefix="/api/payments")
 
 payment_schema = PaymentSchema()
+
 
 @payment.post('/')
 @require_auth
@@ -41,7 +42,7 @@ async def create_charge(req):
         if existing_order.status == OrderStatus.Cancelled:
             raise BadRequestException("Can't pay for cancalled order")
 
-        if existing_order.status == OrderStatus.Complete:
+        if existing_order.status == OrderStatus.Completed:
             raise BadRequestException("Can't pay for paid order")
 
         charge = stripe.Charge.create(amount=existing_order.price * 100, currency='inr',
@@ -54,7 +55,7 @@ async def create_charge(req):
         payment = Payment(**_payment)
         session.add(payment)
 
-        existing_order.status = OrderStatus.Complete
+        existing_order.status = OrderStatus.Completed
         session.add(existing_order)
 
         await session.commit()

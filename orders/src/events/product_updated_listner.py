@@ -1,4 +1,3 @@
-import json
 from zone_common.events.subjects import Subjects
 from zone_common.exceptions.not_found_exception import NotFoundException
 from sqlalchemy import and_
@@ -13,7 +12,7 @@ from .queue_group_name import QueueGroupName
 
 class ProductUpdatedListner(Listener):
     subject = Subjects.ProductUpdated
-    queueGroupName = QueueGroupName.ProductUpdatedListener
+    queueGroupName = QueueGroupName.ProductUpdatedListeners
 
     def __init__(self, client):
         super().__init__(client=client)

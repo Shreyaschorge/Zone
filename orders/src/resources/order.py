@@ -114,7 +114,7 @@ async def cancel_order(req, uuid):
         if existing_order.userId != current_user["uuid"]:
             raise BadRequestException("Can't access orders of another user")
 
-        if existing_order.status == OrderStatus.Complete:
+        if existing_order.status == OrderStatus.Completed:
             raise BadRequestException("Cannot cancel a completed order")
 
         await session.execute('UPDATE orders SET status=:status WHERE uuid=:uuid', {'status': OrderStatus.Cancelled, 'uuid': uuid})
@@ -133,7 +133,7 @@ async def get_sellers_paid_products(req):
     q = (select(Order)
          .join(OrderProduct, Order.uuid == OrderProduct.orderId)
          .join(Product, OrderProduct.productId == Product.uuid)
-         .filter(and_((Order.status == 'complete'), (Product.userId == current_user["uuid"])))
+         .filter(and_((Order.status == OrderStatus.Completed), (Product.userId == current_user["uuid"])))
          .options(selectinload(Order.products).selectinload(Product.order_products))
          .group_by(Order.uuid)
          )

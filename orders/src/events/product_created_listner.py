@@ -1,4 +1,3 @@
-import json
 from zone_common.events.subjects import Subjects
 
 from zone_common.events.base_listener import Listener
@@ -9,7 +8,7 @@ from .queue_group_name import QueueGroupName
 
 class ProductCreatedListner(Listener):
     subject = Subjects.ProductCreated
-    queueGroupName = QueueGroupName.ProductCreatedListener
+    queueGroupName = QueueGroupName.ProductCreatedListeners
 
     def __init__(self, client):
         super().__init__(client=client)

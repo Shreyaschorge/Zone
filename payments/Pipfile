@@ -13,6 +13,7 @@ aiosqlite = "*"
 sqlalchemy = {extras = ["asyncio"], version = "*"}
 python-decouple = "*"
 stripe = "*"
+zone-common = "*"
 
 [dev-packages]
 
