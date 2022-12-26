@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payments-postgres-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payments-postgres
+  template:
+    metadata:
+      labels:
+        app: payments-postgres
+    spec:
+      volumes:
+        - name: payments-pg-volume
+          persistentVolumeClaim:
+            claimName: payments-pg-volume-claim
+      containers:
+        - name: payments-postgres
+          image: postgres:11-alpine
+          volumeMounts:
+            - name: payments-pg-volume
+              mountPath: /var/lib/postgresql/data
+              subPath: postgres
+          env:
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pg-password
+                  key: PG_PASSWORD
+            - name: POSTGRES_DB
+              value: Payments
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: payments-postgres-srv
+spec:
+  selector:
+    app: payments-postgres
+  ports:
+    - name: db
+      protocol: TCP
+      port: 5432
+      targetPort: 5432
