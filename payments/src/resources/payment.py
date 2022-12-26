@@ -1,3 +1,4 @@
+import asyncio as aio
 from sanic import Blueprint, response
 from zone_common.middlewares.require_auth import require_auth
 from marshmallow.exceptions import ValidationError
@@ -10,6 +11,8 @@ from models.order import Order
 from models.payment import Payment
 from schema.payment import PaymentSchema
 from stripeClient import stripe
+from events.payment_created_publisher import PaymentCreatedPublisher
+from natsWrapper import natsWrapper
 
 payment = Blueprint(name="payment", url_prefix="/api/payments")
 
@@ -61,5 +64,10 @@ async def create_charge(req):
         await session.commit()
 
     # Publish payment created event
+    aio.create_task(PaymentCreatedPublisher(natsWrapper.client).publish({
+        "uuid": payment.uuid,
+        "orderId": existing_order.uuid,
+        "version_id": existing_order.version_id
+    }))
 
     return response.json({"id": payment.uuid})
