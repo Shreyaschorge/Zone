@@ -29,6 +29,7 @@ async def all_users_orders(req):
             selectinload(Order.products))
         result = await session.execute(q)
         all_orders = result.scalars().all()
+
     return response.json([order.to_dict() for order in all_orders], status=200)
 
 
@@ -88,7 +89,8 @@ async def create_order(req):
         order_products = []
 
         for product in existing_products:
-            total_price = total_price + product.price
+            total_price = total_price + \
+                (product.price * getProductQuantity(product))
             order_products.append(OrderProduct(
                 order=order, product=product, quantity=getProductQuantity(product)))
 
@@ -153,26 +155,13 @@ async def get_sellers_paid_products(req):
     q = (select(Order)
          .join(OrderProduct, Order.uuid == OrderProduct.orderId)
          .join(Product, OrderProduct.productId == Product.uuid)
-         .filter(and_((Order.status == OrderStatus.Completed), (Product.userId == current_user["uuid"])))
-         .options(selectinload(Order.products).selectinload(Product.order_products))
+         .filter(and_(Order.status == OrderStatus.Completed, Order.userId != current_user["uuid"]))
+         .options(selectinload(Order.products.and_(Product.userId == current_user["uuid"]))
+         .selectinload(Product.order_products))
          .group_by(Order.uuid)
          )
 
     result = await session.execute(q)
-
     _paidOrders = result.all()
 
-    res = [order[0].to_dict() for order in _paidOrders]
-
-    def filterOrders(order):
-        _order = {}
-        _order["uuid"] = order["uuid"]
-        _order["userId"] = order["userId"]
-        _order["status"] = order["status"]
-        _order['products'] = list(
-            filter(lambda x: x['userId'] == current_user['uuid'], order["products"]))
-        return _order
-
-    paidOrders = list(map(filterOrders, res))
-
-    return response.json(paidOrders, status=200)
+    return response.json([order[0].to_orderProducts_dict() for order in _paidOrders], status=200)

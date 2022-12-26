@@ -20,7 +20,7 @@ class Product(Base):
         "Order", secondary="order_products", back_populates='products')
 
     order_products = relationship(
-        "OrderProduct", back_populates="product", uselist=False)
+        "OrderProduct", back_populates="product")
 
     def to_dict(self):
         return {"uuid": self.uuid, "title": self.title, "price": self.price, "description": self.description, "userId": self.userId, "orders": order_schema.dump(self.orders)}

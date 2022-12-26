@@ -11,6 +11,7 @@ from models.product import Product
 from models.order_products import OrderProduct
 from events.product_created_listner import ProductCreatedListner
 from events.product_updated_listner import ProductUpdatedListner
+from events.payment_created_listener import PaymentCreatedListener
 from natsWrapper import natsWrapper
 
 from constants import APP_NAME
@@ -35,6 +36,7 @@ async def bst(app, loop):
 
         aio.create_task(ProductCreatedListner(natsWrapper.client).listen())
         aio.create_task(ProductUpdatedListner(natsWrapper.client).listen())
+        aio.create_task(PaymentCreatedListener(natsWrapper.client).listen())
     except Exception as err:
         print(f'Error => : {APP_NAME}', err)
 

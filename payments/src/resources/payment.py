@@ -48,7 +48,7 @@ async def create_charge(req):
         if existing_order.status == OrderStatus.Completed:
             raise BadRequestException("Can't pay for paid order")
 
-        charge = stripe.Charge.create(amount=existing_order.price * 100, currency='inr',
+        charge = stripe.Charge.create(amount=int(existing_order.price * 100), currency='inr',
                                       source=order['token'], metadata={"userId": userId})
 
         _payment = {

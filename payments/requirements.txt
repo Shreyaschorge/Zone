@@ -25,4 +25,4 @@ urllib3==1.26.13
 uvloop==0.17.0
 websockets==10.4
 Werkzeug==2.2.2
-zone-common==0.0.16
+zone-common==0.0.17

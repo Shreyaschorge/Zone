@@ -25,14 +25,33 @@ class Order(Base):
     __mapper_args__ = {"version_id_col": version_id}
 
     def to_dict(self):
-        return {"uuid": self.uuid, "userId": self.userId, "status": self.status, "products": [{
-            "title": product.title,
-            "price": product.price,
-            "description": product.description,
-            "uuid": product.uuid,
-            "userId": product.userId,
-            "quantity": product.order_products.quantity
-        } for product in self.products]}
+        return {
+            "uuid": self.uuid,
+            "userId": self.userId,
+            "status": self.status,
+            "products": [({
+                "title": product.title,
+                "price": product.price,
+                "description": product.description,
+                "uuid": product.uuid,
+                "userId": product.userId
+            }) for product in self.products]
+        }
+
+    def to_orderProducts_dict(self):
+        return {
+            "uuid": self.uuid,
+            "userId": self.userId,
+            "status": self.status,
+            "products": [({
+                "title": product.title,
+                "price": product.price,
+                "description": product.description,
+                "uuid": product.uuid,
+                "userId": product.userId,
+                "quantity": [prod.quantity for prod in product.order_products if prod.productId == product.uuid and self.uuid == prod.orderId]
+            }) for product in self.products]
+        }
 
 
 def add_uuid(mapper, connect, target):
