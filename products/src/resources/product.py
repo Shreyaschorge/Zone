@@ -25,7 +25,7 @@ async def all_products(req):
     session = req.ctx.session
     userId = req.ctx.current_user["uuid"]
 
-    q = select(Product).filter(not_(Product.uuid == userId))
+    q = select(Product).filter(not_(Product.userId == userId))
     result = await session.execute(q)
     all_products = product_list_schema.dump(
         result.scalars())
