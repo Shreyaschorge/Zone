@@ -1,28 +1,12 @@
 import './App.css';
-import axios from 'axios'
-import {useState, useEffect} from 'react'
+import 'antd/dist/reset.css';
+import { Button } from 'antd';
 
 function App() {
 
-  const [resp, setResp] = useState(null)
-
-  const fetchProduct = async () => {
-    try {
-      const res = await axios.get('/api/payments');
-      setResp(res.data)
-      console.log(res.data)
-    } catch (err) {
-      console.log(err)
-    }
-  }
-
-  useEffect(() => {
-    fetchProduct();
-  }, [])
-
   return (
-    <div className="App">
-      <h2>Hello World {resp}</h2>
+    <div style={{margin: "20px"}} className="App">
+      <Button type="primary">Primary Button</Button>
     </div>
   );
 }
