@@ -19,6 +19,11 @@ from natsWrapper import natsWrapper
 order = Blueprint(name="order", url_prefix="/api/orders")
 
 
+@order.get("/test")
+async def test_route(req):
+    return response.text("Hi 😎")
+
+
 @order.get('/')
 @require_auth
 async def all_users_orders(req):
