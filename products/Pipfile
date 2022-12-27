@@ -13,6 +13,7 @@ nanoid = "*"
 pyjwt = "*"
 nats-py = "*"
 zone-common = "*"
+sanic-cors = "*"
 
 [dev-packages]
 

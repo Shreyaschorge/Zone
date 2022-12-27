@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "d913a070a01b797e1dbb21a502251b9872b35ba577817c9702f8d1bda227a216"
+            "sha256": "25b959e0983b82a906e50a558c0e1545e3729f0608c77ca32fc05c9ff5dde696"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -374,6 +374,14 @@
             ],
             "index": "pypi",
             "version": "==22.9.1"
+        },
+        "sanic-cors": {
+            "hashes": [
+                "sha256:c3b133ff1f0bb609a53db35f727f5c371dc4ebeb6be4cc2c37c19dd8b9301115",
+                "sha256:f8d7515da4c8b837871d422c66314c4b5704396a78894b59c50e26aa72a95873"
+            ],
+            "index": "pypi",
+            "version": "==2.2.0"
         },
         "sanic-routing": {
             "hashes": [

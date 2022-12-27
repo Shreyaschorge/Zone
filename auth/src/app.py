@@ -2,6 +2,7 @@ import os
 
 from flask import Flask, jsonify
 from flask_jwt_extended import JWTManager
+from flask_cors import CORS
 
 from ma import ma
 from resources.user import UserRegister, UserLogin, UserLogout, TokenRefresh
@@ -11,6 +12,7 @@ from blocklist import jwt_redis_blocklist
 from keys import JWT_SECRET_KEY, PG_USER, PG_PASSWORD, PG_HOST, PG_PORT, PG_DATABASE
 
 app = Flask(__name__)
+CORS(app)
 
 app.config['DEBUG'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{PG_USER}:{PG_PASSWORD}@{PG_HOST}:{PG_PORT}/{PG_DATABASE}'

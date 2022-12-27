@@ -3,6 +3,7 @@ from sanic import Sanic, response
 from zone_common.exceptions import CustomException
 from zone_common.middlewares.current_user import current_user
 from contextvars import ContextVar
+from sanic_cors import CORS
 
 from resources.product import product
 from models.product import Product
@@ -13,6 +14,8 @@ from constants import APP_NAME
 from keys import NATS_URL
 
 app = Sanic(name=APP_NAME)
+CORS(app)
+
 app.blueprint(product)
 
 _base_model_session_ctx = ContextVar("session")
