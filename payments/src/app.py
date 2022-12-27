@@ -3,6 +3,7 @@ from sanic import Sanic, response
 from contextvars import ContextVar
 from zone_common.middlewares.current_user import current_user
 from zone_common.exceptions import CustomException
+from sanic_cors import CORS
 
 from db import bind, _sessionmaker
 from models.order import Order
@@ -16,6 +17,8 @@ from constants import APP_NAME
 from keys import NATS_URL
 
 app = Sanic(name=APP_NAME)
+CORS(app)
+
 app.blueprint(payment)
 
 _base_model_session_ctx = ContextVar("session")
@@ -24,7 +27,6 @@ _base_model_session_ctx = ContextVar("session")
 @app.listener('before_server_start')
 async def before_start(app, loop):
     try:
-
         await natsWrapper.connect(url=NATS_URL)
 
         async with bind.begin() as conn:

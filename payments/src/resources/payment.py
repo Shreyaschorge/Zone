@@ -19,6 +19,11 @@ payment = Blueprint(name="payment", url_prefix="/api/payments")
 payment_schema = PaymentSchema()
 
 
+@payment.get("/")
+async def test_route(req):
+    return response.text("Hi 😎")
+
+
 @payment.post('/')
 @require_auth
 async def create_charge(req):
