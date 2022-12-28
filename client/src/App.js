@@ -18,7 +18,7 @@ import { Cart } from './pages/buy-products/Cart';
 import { Order } from './pages/buy-products/Order';
 import { OrderList } from './pages/buy-products/OrderList';
 import { SellProducts } from './pages/sell-products/SellProducts';
-import { ShowProduct } from './pages/sell-products/ShowProduct';
+import { PaidProducts } from './pages/sell-products/PaidProducts';
 import { NotFound } from './pages/NotFound';
 import { useApp } from './layout/AppContext'
 import { notification } from 'antd'
@@ -63,9 +63,9 @@ function App() {
           />
           <SecureRoute path="/sell-products" exact component={SellProducts} />
           <SecureRoute
-            path="/sell-products/:productId"
+            path="/sell-products/paidProducts"
             exact
-            component={ShowProduct}
+            component={PaidProducts}
           />
           <Route path="*" component={NotFound} />
         </Switch>

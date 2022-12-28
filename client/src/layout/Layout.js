@@ -1,11 +1,12 @@
 import React from 'react';
-import { ExportOutlined, FullscreenExitOutlined, FullscreenOutlined } from '@ant-design/icons';
+import { BarChartOutlined, ExportOutlined, FullscreenExitOutlined, FullscreenOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import { Button, Layout as AntLayout, Menu, notification, } from 'antd';
 import { useHistory } from 'react-router-dom'
 import './layout.css'
 import Token from '../utils/manageToken'
 import Axios from '../utils/api'
 import { useApp } from './AppContext'
+import { CartButton } from '../components/CartButton';
 
 const { Header, Content, Sider } = AntLayout;
 
@@ -19,6 +20,11 @@ const menu = [
         title: 'Sell Products',
         icon: <FullscreenOutlined />,
         path: '/sell-products',
+    },
+    {
+        title: 'Paid Products',
+        icon: <BarChartOutlined />,
+        path: '/sell-products/paidProducts',
     }
 ]
 
@@ -65,6 +71,7 @@ const Layout = ({ children }) => {
             </Sider>
             <AntLayout>
                 <Header style={styles.header}>
+                    <CartButton />
                     <Button
                         type="default"
                         size='large'
