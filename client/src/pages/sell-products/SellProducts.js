@@ -1,5 +1,5 @@
 import './SellProducts.css'
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Button, Modal, notification, Input, InputNumber, Row, Col, Image } from 'antd'
 import { ProductCard } from '../../components/SellerProductCard'
 
@@ -7,44 +7,6 @@ import { Header } from '../../components/Header'
 import { currency } from '../../constantVars'
 import Axios from '../../utils/api'
 import { useApp } from '../../layout/AppContext'
-
-const products = [
-  // {
-  //   title: 'Test this 1',
-  //   description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean m',
-  //   price: 343.56
-  // },
-  // {
-  //   title: 'Test this 2',
-  //   description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean m',
-  //   price: 8765.78
-  // },
-  // {
-  //   title: 'Test this 3',
-  //   description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean m',
-  //   price: 342.53
-  // },
-  // {
-  //   title: 'Test this 4',
-  //   description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean m',
-  //   price: 876.45
-  // },
-  // {
-  //   title: 'Test this 5',
-  //   description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean m',
-  //   price: 344.56
-  // },
-  // {
-  //   title: 'Test this 6',
-  //   description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean m',
-  //   price: 344.56
-  // },
-  // {
-  //   title: 'Test this 7',
-  //   description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean m',
-  //   price: 344.56
-  // },
-]
 
 export const SellProducts = () => {
 
@@ -54,6 +16,21 @@ export const SellProducts = () => {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [price, setPrice] = useState('')
+
+  const [usersProducts, setUserProducts] = useState([])
+
+  const fetchUsersProducts = useCallback(async () => {
+    try {
+      const { data } = await Axios.get('/products/usersProducts')
+      setUserProducts(data)
+    } catch (err) {
+      setErrors(err.response.data.errors)
+    }
+  }, [])
+
+  useEffect(() => {
+    fetchUsersProducts()
+  }, [fetchUsersProducts])
 
   const clearFields = () => {
     setPrice('')
@@ -67,25 +44,16 @@ export const SellProducts = () => {
 
   const handleOk = async () => {
     try {
-
-      // await Axios.post('/products', {
-      //   title,
-      //   description,
-      //   price
-      // })
-
-
-
-      products.push({
+      await Axios.post('/products', {
         title,
         description,
         price
       })
-
       notification.success({
         message: 'Product Added Successfully',
         placement: 'bottomRight'
       })
+      fetchUsersProducts()
       setIsModalOpen(false);
       clearFields()
     } catch (err) {
@@ -93,6 +61,7 @@ export const SellProducts = () => {
     }
 
   };
+
   const handleCancel = () => {
     setIsModalOpen(false);
   };
@@ -106,18 +75,20 @@ export const SellProducts = () => {
     )
   }
 
+  const getUserProductsScreen = useCallback(() => {
+    return <Row gutter={[16, 16]} >
+      {usersProducts.map(({ title, description, price, uuid }, index) => <Col key={`${index}`} className="gutter-row" span={6}><ProductCard {...({ title, description, price, uuid, fetchUsersProducts })} /></Col>)}
+    </Row>
+  }, [usersProducts])
+
   return <>
     <Header style={{ marginBottom: "30px" }} title={'Your Products'}>
       <Button type='primary' size='large' onClick={showModal} >Add Product</Button>
     </Header>
 
     <div >
-      {products.length === 0 ? getZeroStateScreen() : <Row gutter={[16, 16]} >
-        {products.map(({ title, description, price }, index) => <Col key={`${index}`} className="gutter-row" span={6}><ProductCard {...({ title, description, price })} /></Col>)}
-      </Row>}
+      {usersProducts && usersProducts.length === 0 ? getZeroStateScreen() : getUserProductsScreen()}
     </div>
-
-
 
     <Modal title="Add Product" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
       <div className='form-container'>

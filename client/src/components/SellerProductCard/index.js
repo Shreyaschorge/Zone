@@ -9,7 +9,7 @@ import { Modal } from 'antd';
 
 const { Meta } = Card;
 
-export const ProductCard = ({ title: t, description: d, price: p }) => {
+export const ProductCard = ({ title: t, description: d, price: p, uuid, fetchUsersProducts }) => {
 
     const { setErrors } = useApp()
 
@@ -17,34 +17,26 @@ export const ProductCard = ({ title: t, description: d, price: p }) => {
     const [description, setDescription] = useState(d);
     const [price, setPrice] = useState(p);
 
-    const clearFields = () => {
-        setPrice('')
-        setDescription('')
-        setTitle('')
-    }
-
     const [isModalOpen, setIsModalOpen] = useState(false);
-
-    console.log("==>", title)
 
     const showModal = () => {
         setIsModalOpen(true);
     };
 
-    const handleOk = () => {
+    const handleOk = async () => {
         try {
+            await Axios.put(`/products/${uuid}`, {
+                title,
+                description,
+                price
+            })
 
-            // await Axios.put(`/products/${uuid}`, {
-            //   title,
-            //   description,
-            //   price
-            // })
             notification.success({
                 message: 'Product Updated Successfully',
                 placement: 'bottomRight'
             })
+            fetchUsersProducts()
             setIsModalOpen(false);
-            clearFields()
         } catch (err) {
             setErrors(err.response.data.errors)
         }

@@ -1,8 +1,11 @@
 import React from 'react';
 import { ExportOutlined, FullscreenExitOutlined, FullscreenOutlined } from '@ant-design/icons';
-import { Button, Layout as AntLayout, Menu, } from 'antd';
+import { Button, Layout as AntLayout, Menu, notification, } from 'antd';
 import { useHistory } from 'react-router-dom'
 import './layout.css'
+import Token from '../utils/manageToken'
+import Axios from '../utils/api'
+import { useApp } from './AppContext'
 
 const { Header, Content, Sider } = AntLayout;
 
@@ -21,6 +24,23 @@ const menu = [
 
 const Layout = ({ children }) => {
     const { push } = useHistory()
+    const { setErrors } = useApp()
+
+    const handleLogout = async () => {
+        try {
+            await Axios.post('/users/logout')
+            Token.removeUser()
+            notification.success({
+                message: "Logged out successfully",
+                placement: 'bottomLeft'
+            })
+            push('/')
+            window.location.reload()
+        } catch (err) {
+            setErrors(err.response.data.errors)
+        }
+
+    }
 
     return (
         <AntLayout style={{ height: "100vh" }}>
@@ -49,7 +69,7 @@ const Layout = ({ children }) => {
                         type="default"
                         size='large'
                         icon={<ExportOutlined />}
-                    // onClick={() => enterLoading(1)}
+                        onClick={handleLogout}
                     >
                         Logout
                     </Button>

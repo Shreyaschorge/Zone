@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Token from './manageToken';
 
-const BASE_URL = 'http://localhost:3001/api';
+const BASE_URL = '/api';
 
 const Axios = axios.create({
   baseURL: BASE_URL,
