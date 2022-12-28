@@ -1,3 +1,8 @@
+import { useApp } from "../../layout/AppContext";
+
 export const Cart = () => {
-  return <h1>Cart</h1>;
+  const { cart } = useApp()
+  return <h1>
+    {JSON.stringify(cart)}
+  </h1>;
 };

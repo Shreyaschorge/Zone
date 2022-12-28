@@ -30,7 +30,7 @@ export const SellProducts = () => {
 
   useEffect(() => {
     fetchUsersProducts()
-  }, [fetchUsersProducts])
+  }, [])
 
   const clearFields = () => {
     setPrice('')
@@ -44,7 +44,7 @@ export const SellProducts = () => {
 
   const handleOk = async () => {
     try {
-      await Axios.post('/products', {
+      const { data } = await Axios.post('/products', {
         title,
         description,
         price
@@ -53,7 +53,7 @@ export const SellProducts = () => {
         message: 'Product Added Successfully',
         placement: 'bottomRight'
       })
-      fetchUsersProducts()
+      setUserProducts([...usersProducts, data])
       setIsModalOpen(false);
       clearFields()
     } catch (err) {
@@ -77,7 +77,7 @@ export const SellProducts = () => {
 
   const getUserProductsScreen = useCallback(() => {
     return <Row gutter={[16, 16]} >
-      {usersProducts.map(({ title, description, price, uuid }, index) => <Col key={`${index}`} className="gutter-row" span={6}><ProductCard {...({ title, description, price, uuid, fetchUsersProducts })} /></Col>)}
+      {usersProducts.map(({ title, description, price, uuid }, index) => <Col key={`${index}`} span={6}><ProductCard {...({ title, description, price, uuid, setUserProducts, usersProducts })} /></Col>)}
     </Row>
   }, [usersProducts])
 
