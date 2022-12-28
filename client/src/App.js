@@ -18,7 +18,6 @@ import { Cart } from './pages/buy-products/Cart';
 import { Order } from './pages/buy-products/Order';
 import { OrderList } from './pages/buy-products/OrderList';
 import { SellProducts } from './pages/sell-products/SellProducts';
-import { AddProduct } from './pages/sell-products/AddProduct';
 import { ShowProduct } from './pages/sell-products/ShowProduct';
 import { NotFound } from './pages/NotFound';
 import { useApp } from './layout/AppContext'
@@ -63,11 +62,6 @@ function App() {
             component={ViewProduct}
           />
           <SecureRoute path="/sell-products" exact component={SellProducts} />
-          <SecureRoute
-            path="/sell-products/add-product"
-            exact
-            component={AddProduct}
-          />
           <SecureRoute
             path="/sell-products/:productId"
             exact
