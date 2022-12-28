@@ -1,14 +1,50 @@
 import './SellProducts.css'
 import { useState } from 'react';
-import { Button, Modal, notification, Input, InputNumber } from 'antd'
-import { useHistory } from 'react-router-dom'
+import { Button, Modal, notification, Input, InputNumber, Row, Col } from 'antd'
+import { ProductCard } from '../../components/SellerProductCard'
 
 import { Header } from '../../components/Header'
 import { currency } from '../../constantVars'
 import Axios from '../../utils/api'
 import { useApp } from '../../layout/AppContext'
 
-const products = []
+const products = [
+  {
+    title: 'Test this',
+    description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean m',
+    price: 344.56
+  },
+  {
+    title: 'Test this',
+    description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean m',
+    price: 344.56
+  },
+  {
+    title: 'Test this',
+    description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean m',
+    price: 344.56
+  },
+  {
+    title: 'Test this',
+    description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean m',
+    price: 344.56
+  },
+  {
+    title: 'Test this',
+    description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean m',
+    price: 344.56
+  },
+  {
+    title: 'Test this',
+    description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean m',
+    price: 344.56
+  },
+  {
+    title: 'Test this',
+    description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean m',
+    price: 344.56
+  },
+]
 
 export const SellProducts = () => {
 
@@ -59,22 +95,16 @@ export const SellProducts = () => {
     setIsModalOpen(false);
   };
 
-  console.log("==>", products)
-
   return <>
-    <Header title={'Your Products'}>
+    <Header style={{ marginBottom: "30px" }} title={'Your Products'}>
       <Button type='primary' size='large' onClick={showModal} >Add Product</Button>
     </Header>
 
-    {products.map(p =>
-    (
-      <div style={{ marginBottom: '20px' }}>
-        <p>{p.title}</p>
-        <p>{p.description}</p>
-        <p>{p.price}</p>
-      </div>
-    )
-    )}
+    <Row gutter={[16, 16]} >
+      {products.map(({ title, description, price }) => <Col className="gutter-row" span={6}><ProductCard {...({ title, description, price })} /></Col>)}
+    </Row>
+
+
 
     <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
       <div className='form-container'>
