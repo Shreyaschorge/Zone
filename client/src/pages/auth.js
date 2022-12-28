@@ -3,8 +3,13 @@ import './auth.css'
 import { useState } from 'react';
 import { Col, Row, Input, Button, Image, notification } from 'antd';
 import { UserOutlined, KeyOutlined } from '@ant-design/icons';
+import { useHistory } from 'react-router-dom'
+import Axios from '../utils/api'
+import Token from '../utils/manageToken';
 
 export const Auth = () => {
+
+    const { push } = useHistory()
 
     const [showResigterScreen, setShowRegisterScreen] = useState(false)
     const [regEmail, setRegEmail] = useState('')
@@ -14,7 +19,7 @@ export const Auth = () => {
     const [loginPass, setLoginPass] = useState('')
 
 
-    const handleRegister = () => {
+    const handleRegister = async () => {
         if (regEmail === "" || regPass === "" || regRePass === "") {
             notification.error({
                 message: "Please enter the details",
@@ -26,18 +31,41 @@ export const Auth = () => {
                 placement: 'bottomRight'
             })
         } else {
-            console.log(regEmail, regPass, regRePass)
+            try {
+                await Axios.post('/users/register', { 'email': regEmail, 'password': regPass })
+                notification.success({
+                    message: "Account created successfully",
+                    placement: 'bottomRight'
+                })
+                setShowRegisterScreen(showResigterScreen => !showResigterScreen)
+
+            } catch (err) {
+                // handle error
+            }
         }
     }
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
         if (loginEmail === "" || loginPass === "") {
             notification.error({
                 message: "Please enter the details",
                 placement: 'bottomRight'
             })
         } else {
-            console.log(loginEmail, loginPass)
+            try {
+                const { data } = await Axios.post('/users/login', { 'email': loginEmail, 'password': loginPass })
+                notification.success({
+                    message: "Logged in successfully",
+                    placement: 'bottomRight'
+                })
+                if (data.access_token) {
+                    Token.setUser(data)
+                }
+                push("/")
+                window.location.reload()
+            } catch (err) {
+                // handle error
+            }
         }
     }
 
