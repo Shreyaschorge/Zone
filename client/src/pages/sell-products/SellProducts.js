@@ -1,6 +1,6 @@
 import './SellProducts.css'
 import { useState } from 'react';
-import { Button, Modal, notification, Input, InputNumber, Row, Col } from 'antd'
+import { Button, Modal, notification, Input, InputNumber, Row, Col, Image } from 'antd'
 import { ProductCard } from '../../components/SellerProductCard'
 
 import { Header } from '../../components/Header'
@@ -9,41 +9,41 @@ import Axios from '../../utils/api'
 import { useApp } from '../../layout/AppContext'
 
 const products = [
-  {
-    title: 'Test this',
-    description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean m',
-    price: 344.56
-  },
-  {
-    title: 'Test this',
-    description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean m',
-    price: 344.56
-  },
-  {
-    title: 'Test this',
-    description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean m',
-    price: 344.56
-  },
-  {
-    title: 'Test this',
-    description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean m',
-    price: 344.56
-  },
-  {
-    title: 'Test this',
-    description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean m',
-    price: 344.56
-  },
-  {
-    title: 'Test this',
-    description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean m',
-    price: 344.56
-  },
-  {
-    title: 'Test this',
-    description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean m',
-    price: 344.56
-  },
+  // {
+  //   title: 'Test this 1',
+  //   description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean m',
+  //   price: 343.56
+  // },
+  // {
+  //   title: 'Test this 2',
+  //   description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean m',
+  //   price: 8765.78
+  // },
+  // {
+  //   title: 'Test this 3',
+  //   description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean m',
+  //   price: 342.53
+  // },
+  // {
+  //   title: 'Test this 4',
+  //   description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean m',
+  //   price: 876.45
+  // },
+  // {
+  //   title: 'Test this 5',
+  //   description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean m',
+  //   price: 344.56
+  // },
+  // {
+  //   title: 'Test this 6',
+  //   description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean m',
+  //   price: 344.56
+  // },
+  // {
+  //   title: 'Test this 7',
+  //   description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean m',
+  //   price: 344.56
+  // },
 ]
 
 export const SellProducts = () => {
@@ -74,6 +74,8 @@ export const SellProducts = () => {
       //   price
       // })
 
+
+
       products.push({
         title,
         description,
@@ -95,18 +97,29 @@ export const SellProducts = () => {
     setIsModalOpen(false);
   };
 
+  const getZeroStateScreen = () => {
+    return (
+      <div className='products-zero-state-container'>
+        <h1 style={{ margin: '20px 0 40px 0' }}>It's empty in here</h1>
+        <Image src='/images/zeroState1.svg' preview={false} width={450} />
+      </div>
+    )
+  }
+
   return <>
     <Header style={{ marginBottom: "30px" }} title={'Your Products'}>
       <Button type='primary' size='large' onClick={showModal} >Add Product</Button>
     </Header>
 
-    <Row gutter={[16, 16]} >
-      {products.map(({ title, description, price }) => <Col className="gutter-row" span={6}><ProductCard {...({ title, description, price })} /></Col>)}
-    </Row>
+    <div >
+      {products.length === 0 ? getZeroStateScreen() : <Row gutter={[16, 16]} >
+        {products.map(({ title, description, price }, index) => <Col key={`${index}`} className="gutter-row" span={6}><ProductCard {...({ title, description, price })} /></Col>)}
+      </Row>}
+    </div>
 
 
 
-    <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+    <Modal title="Add Product" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
       <div className='form-container'>
         <div className='form-fields'>
           <label>Name</label>
