@@ -2,6 +2,7 @@ import { useContext, createContext, useState } from 'react'
 
 const AppContext = createContext({
     errors: null,
+    setErrors: () => { }
 });
 
 export const AppProvider = ({ children }) => {
