@@ -23,6 +23,7 @@ import { ShowProduct } from './pages/sell-products/ShowProduct';
 import { NotFound } from './pages/NotFound';
 import { useApp } from './layout/AppContext'
 import { notification } from 'antd'
+import Layout from './layout/Layout';
 
 function App() {
 
@@ -43,36 +44,38 @@ function App() {
 
   const getApp = () => {
     return (
-      <Switch>
-        <SecureRoute exact path="/">
-          <Redirect to="/buy-products" />
-        </SecureRoute>
-        <SecureRoute path="/buy-products" exact component={BuyProducts} />
-        <SecureRoute path="/buy-products/cart" exact component={Cart} />
-        <SecureRoute path="/buy-products/orders" exact component={OrderList} />
-        <SecureRoute
-          path="/buy-products/orders/:orderId"
-          exact
-          component={Order}
-        />
-        <SecureRoute
-          path="/buy-products/:productId"
-          exact
-          component={ViewProduct}
-        />
-        <SecureRoute path="/sell-products" exact component={SellProducts} />
-        <SecureRoute
-          path="/sell-products/add-product"
-          exact
-          component={AddProduct}
-        />
-        <SecureRoute
-          path="/sell-products/:productId"
-          exact
-          component={ShowProduct}
-        />
-        <Route path="*" component={NotFound} />
-      </Switch>
+      <Layout>
+        <Switch>
+          <SecureRoute exact path="/">
+            <Redirect to="/buy-products" />
+          </SecureRoute>
+          <SecureRoute path="/buy-products" exact component={BuyProducts} />
+          <SecureRoute path="/buy-products/cart" exact component={Cart} />
+          <SecureRoute path="/buy-products/orders" exact component={OrderList} />
+          <SecureRoute
+            path="/buy-products/orders/:orderId"
+            exact
+            component={Order}
+          />
+          <SecureRoute
+            path="/buy-products/:productId"
+            exact
+            component={ViewProduct}
+          />
+          <SecureRoute path="/sell-products" exact component={SellProducts} />
+          <SecureRoute
+            path="/sell-products/add-product"
+            exact
+            component={AddProduct}
+          />
+          <SecureRoute
+            path="/sell-products/:productId"
+            exact
+            component={ShowProduct}
+          />
+          <Route path="*" component={NotFound} />
+        </Switch>
+      </Layout>
     );
   };
 
