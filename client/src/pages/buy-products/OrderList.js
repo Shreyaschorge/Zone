@@ -1,3 +1,3 @@
 export const OrderList = () => {
-    return <h1>OrderList</h1>
-}
+  return <h1>OrderList</h1>;
+};

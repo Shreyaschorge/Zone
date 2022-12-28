@@ -1,15 +1,16 @@
-import React from "react";
-import { Redirect, Route } from "react-router-dom";
-import Token from './utils/manageToken'
+import React from 'react';
+import { Redirect, Route } from 'react-router-dom';
+import Token from './utils/manageToken';
 
-export const SecureRoute = ({component: Component, ...rest}) => {
+export const SecureRoute = ({ component: Component, ...rest }) => {
+  const auth = Token.getUser();
 
-  const auth = Token.getUser()
-  
   return (
-    <Route 
+    <Route
       {...rest}
-      render={props => !auth ? <Redirect to="/auth"/> : <Component {...props} />}
+      render={(props) =>
+        !auth ? <Redirect to="/auth" /> : <Component {...props} />
+      }
     />
-  )
-}
+  );
+};
