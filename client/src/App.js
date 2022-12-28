@@ -1,5 +1,6 @@
 import './App.css';
 import 'antd/dist/reset.css';
+import { useEffect } from 'react';
 
 import {
   Switch,
@@ -20,9 +21,25 @@ import { SellProducts } from './pages/sell-products/SellProducts';
 import { AddProduct } from './pages/sell-products/AddProduct';
 import { ShowProduct } from './pages/sell-products/ShowProduct';
 import { NotFound } from './pages/NotFound';
+import { useApp } from './layout/AppContext'
+import { notification } from 'antd'
 
 function App() {
+
+  const { errors } = useApp()
   const isAuthenticated = Token.getUser();
+
+  useEffect(() => {
+    if (errors) {
+      errors.forEach((error) => {
+        notification.error({
+          message: error.message,
+          placement: "bottomRight"
+        });
+      })
+    }
+  }, [errors]);
+
 
   const getApp = () => {
     return (

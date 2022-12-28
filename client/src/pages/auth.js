@@ -4,11 +4,12 @@ import { useState } from 'react';
 import { Col, Row, Input, Button, Image, notification } from 'antd';
 import { UserOutlined, KeyOutlined } from '@ant-design/icons';
 import { useHistory } from 'react-router-dom'
+import { useApp } from '../layout/AppContext'
 import Axios from '../utils/api'
 import Token from '../utils/manageToken';
 
 export const Auth = () => {
-
+    const { setErrors } = useApp()
     const { push } = useHistory()
 
     const [showResigterScreen, setShowRegisterScreen] = useState(false)
@@ -40,7 +41,7 @@ export const Auth = () => {
                 setShowRegisterScreen(showResigterScreen => !showResigterScreen)
 
             } catch (err) {
-                // handle error
+                setErrors(err.response.data.errors)
             }
         }
     }
@@ -64,7 +65,7 @@ export const Auth = () => {
                 push("/")
                 window.location.reload()
             } catch (err) {
-                // handle error
+                setErrors(err.response.data.errors)
             }
         }
     }
