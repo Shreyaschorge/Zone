@@ -1,8 +1,20 @@
 import './index.css'
+import { Typography } from 'antd'
 
-export const Header = ({ title, children, ...rest }) => {
+const { Text } = Typography
+
+export const Header = ({ title, titleSuffix, children, ...rest }) => {
     return <div {...rest} className='container'>
-        <p className={'title'}>{title}</p>
+        <div className='title-container'>
+            <Text ellipsis={{
+                tooltip: title,
+            }} className={'title'}>{title}</Text>
+            {titleSuffix()}
+        </div>
         {children}
     </div>
+}
+
+Header.defaultProps = {
+    titleSuffix: () => <></>
 }

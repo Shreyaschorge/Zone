@@ -13,10 +13,8 @@ export const ProductCard = ({ title, description, price, uuid }) => {
         const existing_item = cart.find(({ productId }) => productId === uuid)
 
         if (!existing_item) {
-            console.log("==> inside if")
             setCart([...cart, { productId: uuid, quantity: 1 }])
         } else {
-            console.log("==> inside else")
             setCart(cart.map(item => item.productId === existing_item.productId
                 ? { productId: existing_item.productId, quantity: existing_item.quantity + 1 }
                 : item))

@@ -2,7 +2,7 @@ import './index.css'
 import { Header } from "../../../components/Header";
 import { useApp } from "../../../layout/AppContext";
 import { CartItem } from '../../../components/CartItem';
-import { Button, Image} from 'antd';
+import { Button, Image } from 'antd';
 import { currency } from '../../../constantVars';
 import Axios from '../../../utils/api'
 import { useHistory } from 'react-router-dom'
@@ -66,7 +66,7 @@ export const Cart = () => {
     }
 
     return <>
-        <Header style={{ marginBottom: "30px" }} title={'Cart 🛒'} >
+        <Header style={{ marginBottom: "30px" }} title={'🛒 Cart'}>
             <Button type='primary' size='large' onClick={handleOrderCreation}>Proceed to checkout</Button>
         </Header>
         {cart && cart.length === 0 ? getZeroStateScreen() : getCartItems()}
