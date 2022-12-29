@@ -157,7 +157,7 @@ async def cancel_order(req, uuid):
     return response.json({"message": "Order is been cancelled"}, status=200)
 
 
-@order.get("/sellerPaidOrders")
+@order.get("/soldProducts")
 @require_auth
 async def get_sellers_paid_products(req):
     session = req.ctx.session

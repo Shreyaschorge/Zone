@@ -91,7 +91,7 @@ export const OrderList = () => {
     const getOrders = () => {
         return <div style={{ margin: "30px 60px 0px 60px" }}>
             <Row gutter={[0, 16]}>
-                {orders.map((order, index) => <Col span={24} key={`${index}`}><OrderItem order={order} /></Col>)}
+                {orders.map((order, index) => <Col span={24} key={`${index}`}><OrderItem {...({order, setOrders, orders})} /></Col>)}
             </Row>
         </div>
 

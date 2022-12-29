@@ -24,7 +24,7 @@ const menu = [
     {
         title: 'Revenue',
         icon: <BarChartOutlined />,
-        path: '/sell-products/paidProducts',
+        path: '/sell-products/revenue',
     },
     {
         title: 'Your Orders',

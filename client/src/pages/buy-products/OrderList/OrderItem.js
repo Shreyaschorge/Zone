@@ -12,7 +12,7 @@ const BadgeColor = {
     cancelled: "red"
 }
 
-export const OrderItem = ({ order }) => {
+export const OrderItem = ({ order, orders, setOrders }) => {
 
     const { push } = useHistory()
     const { setErrors } = useApp()
@@ -28,6 +28,7 @@ export const OrderItem = ({ order }) => {
                 message: data.message,
                 placement: "bottomRight"
             })
+            setOrders(orders.map(o => o.uuid === order.uuid ? { ...o, status: 'cancelled' } : o))
         } catch (err) {
             setErrors(err.response.data.errors)
         }

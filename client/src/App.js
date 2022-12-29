@@ -13,12 +13,11 @@ import Token from './utils/manageToken';
 import { Auth } from './pages/auth';
 import { SecureRoute } from './secureRoute';
 import { BuyProducts } from './pages/buy-products/BuyProducts';
-import { ViewProduct } from './pages/buy-products/ViewProduct';
 import { Cart } from './pages/buy-products/Cart';
 import { Order } from './pages/buy-products/Order';
 import { OrderList } from './pages/buy-products/OrderList';
 import { SellProducts } from './pages/sell-products/SellProducts';
-import { PaidProducts } from './pages/sell-products/PaidProducts';
+import { Revenue } from './pages/sell-products/Revenue';
 import { NotFound } from './pages/NotFound';
 import { useApp } from './layout/AppContext'
 import { notification } from 'antd'
@@ -56,16 +55,11 @@ function App() {
             exact
             component={Order}
           />
-          <SecureRoute
-            path="/buy-products/:productId"
-            exact
-            component={ViewProduct}
-          />
           <SecureRoute path="/sell-products" exact component={SellProducts} />
           <SecureRoute
-            path="/sell-products/paidProducts"
+            path="/sell-products/revenue"
             exact
-            component={PaidProducts}
+            component={Revenue}
           />
           <Route path="*" component={NotFound} />
         </Switch>
