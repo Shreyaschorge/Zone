@@ -10,32 +10,6 @@ import { currency } from '../../../constantVars';
 import StripeCheckout from 'react-stripe-checkout';
 import Token from '../../../utils/manageToken';
 
-
-const _order = {
-    uuid: "order_1uqogqKtnVz4FC_nYfJxajt3YChkso",
-    userId: "user_5WubOWgg48ZvsQqRgADF08fSML8BNM",
-    status: "draft",
-    products: [
-        {
-            title: "Buddha Idol",
-            price: 500,
-            description: "Have a calming presence, when you look at it.",
-            uuid: "product_VjweRd_6UzMmj6zrMfzm-TtLlxIgHC",
-            userId: "user_2Uwh4WCqq1VuawBlIIZZH_Ox1HC6Fv",
-            quantity: 1
-
-        },
-        {
-            title: "Plant Vase",
-            price: 200,
-            description: "White hexagonal vase for bamboo plant.",
-            uuid: "product_wroaTo0oBXg9qzMDWPA4u1zXozgIwY",
-            userId: "user_2Uwh4WCqq1VuawBlIIZZH_Ox1HC6Fv",
-            quantity: 2
-        }
-    ]
-}
-
 const TagColor = {
     draft: "blue",
     completed: "success",
@@ -47,7 +21,7 @@ export const Order = () => {
     const { push } = useHistory()
     const { setErrors } = useApp()
 
-    const [order, setOrder] = useState(_order)
+    const [order, setOrder] = useState([])
 
     const fetchOrder = useCallback(async () => {
         if (orderId) {

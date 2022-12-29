@@ -7,75 +7,10 @@ import Axios from '../../../utils/api';
 import { Badge, Card, Col, Image, Row } from 'antd';
 import Meta from 'antd/es/card/Meta';
 
-
-const orderList = [
-    {
-        uuid: "order_1uqogqKtnVz4FC_nYfJxajt3YChkso",
-        userId: "user_5WubOWgg48ZvsQqRgADF08fSML8BNM",
-        status: "completed",
-        products: [
-            {
-                title: "Buddha Idol",
-                price: 500,
-                description: "Have a calming presence, when you look at it.",
-                uuid: "product_VjweRd_6UzMmj6zrMfzm-TtLlxIgHC",
-                userId: "user_2Uwh4WCqq1VuawBlIIZZH_Ox1HC6Fv",
-                quantity: 2
-            },
-            {
-                title: "Plant Vase",
-                price: 200,
-                description: "White hexagonal vase for bamboo plant.",
-                uuid: "product_wroaTo0oBXg9qzMDWPA4u1zXozgIwY",
-                userId: "user_2Uwh4WCqq1VuawBlIIZZH_Ox1HC6Fv",
-                quantity: 10
-            }
-        ]
-    },
-    {
-        uuid: "order_EWJqcHzTXWx9moMcSywXs02fMqzJUD",
-        userId: "user_5WubOWgg48ZvsQqRgADF08fSML8BNM",
-        status: "completed",
-        products: [
-            {
-                title: "Buddha Idol",
-                price: 500,
-                description: "Have a calming presence, when you look at it.",
-                uuid: "product_VjweRd_6UzMmj6zrMfzm-TtLlxIgHC",
-                userId: "user_2Uwh4WCqq1VuawBlIIZZH_Ox1HC6Fv",
-                quantity: 3
-            }
-        ]
-    },
-    {
-        uuid: "order_ly48pfEvRR1ZZD7TvZ8OG3V6tlrujD",
-        userId: "user_5WubOWgg48ZvsQqRgADF08fSML8BNM",
-        status: "completed",
-        products: [
-            {
-                title: "Buddha Idol",
-                price: 500,
-                description: "Have a calming presence, when you look at it.",
-                uuid: "product_VjweRd_6UzMmj6zrMfzm-TtLlxIgHC",
-                userId: "user_2Uwh4WCqq1VuawBlIIZZH_Ox1HC6Fv",
-                quantity: 2
-            },
-            {
-                title: "Plant Vase",
-                price: 200,
-                description: "White hexagonal vase for bamboo plant.",
-                uuid: "product_wroaTo0oBXg9qzMDWPA4u1zXozgIwY",
-                userId: "user_2Uwh4WCqq1VuawBlIIZZH_Ox1HC6Fv",
-                quantity: 8
-            }
-        ]
-    }
-]
-
 export const Revenue = () => {
     const { setErrors } = useApp()
 
-    const [soldProductsOrders, setSoldProductsOrders] = useState(orderList)
+    const [soldProductsOrders, setSoldProductsOrders] = useState([])
 
     const fetchSoldProducts = useCallback(async () => {
         try {
@@ -133,7 +68,7 @@ export const Revenue = () => {
                                 />
 
                                 <p style={{ fontSize: '20px', fontWeight: 300, margin: '20px 0 0 0', padding: 0 }}>
-                                    Quantity &nbsp;{quantity}
+                                    {quantity}&nbsp;Sold
                                 </p>
 
                             </Card>
