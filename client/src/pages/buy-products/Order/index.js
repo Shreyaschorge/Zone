@@ -1,12 +1,12 @@
-import './index.css'
 import { useCallback, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import { useApp } from '../../../layout/AppContext';
 import Axios from '../../../utils/api'
 import { Header } from '../../../components/Header'
-import { Button, Col, Row, Tag } from 'antd';
+import { notification, Tag } from 'antd';
 import { ProductCard } from './ProductCard'
 import { currency } from '../../../constantVars';
+import StripeCheckout from 'react-stripe-checkout';
 
 const _order = {
     uuid: "order_1uqogqKtnVz4FC_nYfJxajt3YChkso",
@@ -46,12 +46,15 @@ export const Order = () => {
     const [order, setOrder] = useState(_order)
 
     const fetchOrder = useCallback(async () => {
-        try {
-            const { data } = await Axios.get(`/orders/${orderId}`)
-            setOrder(data)
-        } catch (err) {
-            setErrors(err.response.data.errors)
+        if (orderId) {
+            try {
+                const { data } = await Axios.get(`/orders/${orderId}`)
+                setOrder(data)
+            } catch (err) {
+                setErrors(err.response.data.errors)
+            }
         }
+
     }, [])
 
     useEffect(() => {
@@ -68,8 +71,19 @@ export const Order = () => {
         return subtotal
     }
 
-    const handleCheckout = () => {
-        
+    const handleCheckout = async (token) => {
+        try {
+            await Axios.post('/payments', {
+                orderId,
+                token
+            })
+            notification.success({
+                message: 'Payment created successfully',
+                placement: 'bottomRight'
+            })
+        } catch (err) {
+            setErrors(err.response.data.errors)
+        }
     }
 
     const getOrderStatus = () => {
@@ -91,7 +105,8 @@ export const Order = () => {
                 {order.products.map(({ price, title, quantity }, index) => <ProductCard key={`${index}`} {...({ price, title, quantity })} />)}
 
                 <div className='bottom-container'>
-                    <div></div>
+                    <div >
+                    </div>
                     <div className='subtotal-container' >
                         <p className='subtotal-label' >subtotal</p>
                         <p className='subtotal' >{currency.rupee.symbol}&nbsp;{getSubTotal()}</p>
@@ -107,7 +122,13 @@ export const Order = () => {
                 ?
                 <>
                     <Header style={{ marginBottom: "30px" }} title={`📝 ${orderId} `} titleSuffix={getOrderStatus}>
-                        {order.status === 'draft' && <Button type='primary' size='large' onClick={handleCheckout}>Checkout</Button>}
+                        {order.status === 'draft'
+                            && <StripeCheckout
+                                token={({ id }) => handleCheckout(id)}
+                                stripeKey={process.env.STRIPE_PK}
+                                amount={parseInt(getSubTotal() * 100)}
+                                currency='inr'
+                            />}
                     </Header>
                     {getProducts()}
                 </>
