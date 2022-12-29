@@ -114,7 +114,7 @@ async def create_order(req):
     # Publish order created event
     aio.create_task(OrderCreatedPublisher(natsWrapper.client).publish(_order))
 
-    return response.json({"message": "Order is been created"}, status=201)
+    return response.json({"uuid": order.uuid}, status=201)
 
 
 @order.put("/cancelOrder/<uuid>")

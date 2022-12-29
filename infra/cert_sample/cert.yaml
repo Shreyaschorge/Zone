@@ -8,4 +8,4 @@ spec:
     name: zone-clusterissuer
     kind: ClusterIssuer
   dnsNames:
-    - zone.dev
+    - zone.ai

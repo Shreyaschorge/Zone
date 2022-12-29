@@ -2,11 +2,15 @@ import './index.css'
 import { Header } from "../../../components/Header";
 import { useApp } from "../../../layout/AppContext";
 import { CartItem } from '../../../components/CartItem';
-import { Button, Col, Image, Row } from 'antd';
+import { Button, Image} from 'antd';
 import { currency } from '../../../constantVars';
+import Axios from '../../../utils/api'
+import { useHistory } from 'react-router-dom'
 
 export const Cart = () => {
-    const { cart, allProducts } = useApp()
+    const { cart, allProducts, setErrors, setCart } = useApp()
+
+    const { push } = useHistory()
 
     const getCartProducts = () => {
         const cartProducts = []
@@ -51,9 +55,19 @@ export const Cart = () => {
         )
     }
 
+    const handleOrderCreation = async () => {
+        try {
+            const { data } = await Axios.post('/orders');
+            push(`/buy-products/orders/${data.uuid}`)
+            setCart([])
+        } catch (err) {
+            setErrors(err.response.data.errors)
+        }
+    }
+
     return <>
         <Header style={{ marginBottom: "30px" }} title={'Cart 🛒'} >
-            <Button type='primary' size='large'>Proceed to checkout</Button>
+            <Button type='primary' size='large' onClick={handleOrderCreation}>Proceed to checkout</Button>
         </Header>
         {cart && cart.length === 0 ? getZeroStateScreen() : getCartItems()}
     </>;

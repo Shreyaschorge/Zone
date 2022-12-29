@@ -1,5 +1,5 @@
 import React from 'react';
-import { BarChartOutlined, ExportOutlined, FullscreenExitOutlined, FullscreenOutlined, ShoppingCartOutlined } from '@ant-design/icons';
+import { BarChartOutlined, ExportOutlined, FullscreenExitOutlined, FullscreenOutlined, SnippetsOutlined } from '@ant-design/icons';
 import { Button, Layout as AntLayout, Menu, notification, } from 'antd';
 import { useHistory } from 'react-router-dom'
 import './layout.css'
@@ -22,8 +22,13 @@ const menu = [
         path: '/sell-products',
     },
     {
-        title: 'Paid Products',
+        title: 'Revenue',
         icon: <BarChartOutlined />,
+        path: '/sell-products/paidProducts',
+    },
+    {
+        title: 'Your Orders',
+        icon: <SnippetsOutlined />,
         path: '/sell-products/paidProducts',
     }
 ]
