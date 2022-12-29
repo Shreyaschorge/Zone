@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import jwt_decode from "jwt-decode";
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { useApp } from '../../../layout/AppContext';
 import Axios from '../../../utils/api'
 import { Header } from '../../../components/Header'
@@ -37,13 +37,14 @@ const _order = {
 }
 
 const TagColor = {
-    draft: "default",
+    draft: "blue",
     completed: "success",
     cancelled: "error"
 }
 
 export const Order = () => {
     const { orderId } = useParams();
+    const { push } = useHistory()
     const { setErrors } = useApp()
 
     const [order, setOrder] = useState(_order)
@@ -84,6 +85,7 @@ export const Order = () => {
                 message: 'Payment created successfully',
                 placement: 'bottomRight'
             })
+            push('/sell-products/paidProducts')
         } catch (err) {
             setErrors(err.response.data.errors)
         }

@@ -82,7 +82,7 @@ export const SellProducts = () => {
   }, [usersProducts])
 
   return <>
-    <Header style={{ marginBottom: "30px" }} title={'Your Products'}>
+    <Header style={{ marginBottom: "30px" }} title={'📦 Your Products'}>
       <Button type='primary' size='large' onClick={showModal} >Add Product</Button>
     </Header>
 

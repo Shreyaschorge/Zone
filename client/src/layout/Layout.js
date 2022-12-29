@@ -29,7 +29,7 @@ const menu = [
     {
         title: 'Your Orders',
         icon: <SnippetsOutlined />,
-        path: '/sell-products/paidProducts',
+        path: '/buy-products/orders',
     }
 ]
 

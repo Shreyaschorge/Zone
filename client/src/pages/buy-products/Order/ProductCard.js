@@ -11,7 +11,7 @@ export const ProductCard = ({ title, price, quantity }) => {
         <div className='quantity-container'>
             {quantity}
         </div>
-        <div className='price-container'> {currency.rupee.symbol}&nbsp;{price * quantity}</div>
+        <div className='price-container'> {currency.rupee.symbol}&nbsp;{quantity * price}</div>
     </div>
 
 
