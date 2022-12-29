@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import jwt_decode from "jwt-decode";
 import { useParams } from 'react-router-dom';
 import { useApp } from '../../../layout/AppContext';
 import Axios from '../../../utils/api'
@@ -7,6 +8,8 @@ import { notification, Tag } from 'antd';
 import { ProductCard } from './ProductCard'
 import { currency } from '../../../constantVars';
 import StripeCheckout from 'react-stripe-checkout';
+import Token from '../../../utils/manageToken';
+
 
 const _order = {
     uuid: "order_1uqogqKtnVz4FC_nYfJxajt3YChkso",
@@ -128,6 +131,7 @@ export const Order = () => {
                                 stripeKey={process.env.STRIPE_PK}
                                 amount={parseInt(getSubTotal() * 100)}
                                 currency='inr'
+                                email={jwt_decode(Token.getLocalAccessToken()).sub.email}
                             />}
                     </Header>
                     {getProducts()}
