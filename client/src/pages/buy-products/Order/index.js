@@ -3,7 +3,8 @@ import { useParams } from 'react-router-dom';
 import { useApp } from '../../../layout/AppContext';
 import Axios from '../../../utils/api'
 import { Header } from '../../../components/Header'
-import { Button, Tag } from 'antd';
+import { Button, Col, Row, Tag } from 'antd';
+import { ProductCard } from './ProductCard'
 
 const _order = {
     uuid: "order_wergupwerhierfwerwgerjhb",
@@ -30,7 +31,7 @@ const _order = {
             description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean m',
             price: 10,
             userId: "user_seller"
-        },
+        }
     ]
 }
 
@@ -62,7 +63,7 @@ export const Order = () => {
     }, [orderId])
 
     const handleCheckout = () => {
-
+        
     }
 
     const getOrderStatus = () => {
@@ -76,13 +77,22 @@ export const Order = () => {
         </Tag>
     }
 
+    const getProducts = () => {
+        return (<Row gutter={[16, 16]}>
+            {order.products.map(({ price, description, title }, index) => <Col key={`${index}`} span={6}><ProductCard {...({ price, description, title })} /></Col>)}
+        </Row>)
+    }
+
     return (<>
         {
             order
                 ?
-                <Header style={{ marginBottom: "30px" }} title={`📝 ${orderId} `} titleSuffix={getOrderStatus}>
-                    {order.status === 'draft' && <Button type='primary' size='large' onClick={handleCheckout}>Checkout</Button>}
-                </Header>
+                <>
+                    <Header style={{ marginBottom: "30px" }} title={`📝 ${orderId} `} titleSuffix={getOrderStatus}>
+                        {order.status === 'draft' && <Button type='primary' size='large' onClick={handleCheckout}>Checkout</Button>}
+                    </Header>
+                    {getProducts()}
+                </>
                 : <></>
         }
     </>)

@@ -57,7 +57,7 @@ export const Cart = () => {
 
     const handleOrderCreation = async () => {
         try {
-            const { data } = await Axios.post('/orders');
+            const { data } = await Axios.post('/orders', cart);
             push(`/buy-products/orders/${data.uuid}`)
             setCart([])
         } catch (err) {
@@ -67,7 +67,7 @@ export const Cart = () => {
 
     return <>
         <Header style={{ marginBottom: "30px" }} title={'🛒 Cart'}>
-            <Button type='primary' size='large' onClick={handleOrderCreation}>Proceed to checkout</Button>
+            {cart && cart.length > 0 && <Button type='primary' size='large' onClick={handleOrderCreation}>Proceed to checkout</Button>}
         </Header>
         {cart && cart.length === 0 ? getZeroStateScreen() : getCartItems()}
     </>;

@@ -1,4 +1,4 @@
-import { Card, notification } from 'antd';
+import { Card } from 'antd';
 import { ShoppingCartOutlined } from '@ant-design/icons'
 import { currency } from '../../constantVars'
 import { useApp } from '../../layout/AppContext'
