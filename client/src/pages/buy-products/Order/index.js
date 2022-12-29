@@ -1,3 +1,4 @@
+import './index.css'
 import { useCallback, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import { useApp } from '../../../layout/AppContext';
@@ -5,32 +6,29 @@ import Axios from '../../../utils/api'
 import { Header } from '../../../components/Header'
 import { Button, Col, Row, Tag } from 'antd';
 import { ProductCard } from './ProductCard'
+import { currency } from '../../../constantVars';
 
 const _order = {
-    uuid: "order_wergupwerhierfwerwgerjhb",
-    userId: "user_buyer",
+    uuid: "order_1uqogqKtnVz4FC_nYfJxajt3YChkso",
+    userId: "user_5WubOWgg48ZvsQqRgADF08fSML8BNM",
     status: "draft",
     products: [
         {
-            title: "Royal Enfield Hunter 350",
-            price: 890,
-            description: "The Royal Enfield Hunter 350 is powered by a 349cc BS6 engine",
-            uuid: "product_1",
-            userId: "user_seller"
+            title: "Buddha Idol",
+            price: 500,
+            description: "Have a calming presence, when you look at it.",
+            uuid: "product_VjweRd_6UzMmj6zrMfzm-TtLlxIgHC",
+            userId: "user_2Uwh4WCqq1VuawBlIIZZH_Ox1HC6Fv",
+            quantity: 1
+
         },
         {
-            uuid: 'product_4',
-            title: 'Kawasaki Ninja',
-            description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean m',
-            price: 10,
-            userId: "user_seller"
-        },
-        {
-            uuid: 'product_3',
-            title: 'TVS Ronin',
-            description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean m',
-            price: 10,
-            userId: "user_seller"
+            title: "Plant Vase",
+            price: 200,
+            description: "White hexagonal vase for bamboo plant.",
+            uuid: "product_wroaTo0oBXg9qzMDWPA4u1zXozgIwY",
+            userId: "user_2Uwh4WCqq1VuawBlIIZZH_Ox1HC6Fv",
+            quantity: 2
         }
     ]
 }
@@ -62,6 +60,14 @@ export const Order = () => {
         }
     }, [orderId])
 
+    const getSubTotal = () => {
+        let subtotal = 0
+        for (let prod of order.products) {
+            subtotal = subtotal + (prod.price * prod.quantity)
+        }
+        return subtotal
+    }
+
     const handleCheckout = () => {
         
     }
@@ -77,10 +83,22 @@ export const Order = () => {
         </Tag>
     }
 
+
+
     const getProducts = () => {
-        return (<Row gutter={[16, 16]}>
-            {order.products.map(({ price, description, title }, index) => <Col key={`${index}`} span={6}><ProductCard {...({ price, description, title })} /></Col>)}
-        </Row>)
+        return (
+            <>
+                {order.products.map(({ price, title, quantity }, index) => <ProductCard key={`${index}`} {...({ price, title, quantity })} />)}
+
+                <div className='bottom-container'>
+                    <div></div>
+                    <div className='subtotal-container' >
+                        <p className='subtotal-label' >subtotal</p>
+                        <p className='subtotal' >{currency.rupee.symbol}&nbsp;{getSubTotal()}</p>
+                    </div>
+                </div>
+            </>
+        )
     }
 
     return (<>

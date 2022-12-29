@@ -1,29 +1,18 @@
-import { Card } from 'antd';
-import { ShoppingCartOutlined } from '@ant-design/icons'
+import './ProductCard.css'
 import { currency } from '../../../constantVars'
 
-const { Meta } = Card;
 
-export const ProductCard = ({ title, description, price }) => {
+export const ProductCard = ({ title, price, quantity }) => {
 
-    return <>
-        <Card
-            style={{ width: 300 }}
-        // actions={[
-        //     <ShoppingCartOutlined key="cart" onClick={addProductToCart} />,
-        // ]}
-        >
-            <Meta
-                title={title}
-                description={description}
-            />
-
-            <p style={{ fontSize: '20px', fontWeight: 300, margin: '20px 0 0 0', padding: 0 }}>
-                {currency.rupee.symbol}&nbsp;{price}
-            </p>
-
-        </Card>
-    </>
+    return <div className='cart-item-container' >
+        <div className='title-container'>
+            {title}
+        </div>
+        <div className='quantity-container'>
+            {quantity}
+        </div>
+        <div className='price-container'> {currency.rupee.symbol}&nbsp;{price * quantity}</div>
+    </div>
 
 
 }

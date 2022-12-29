@@ -1,0 +1,34 @@
+.cart-item-container{
+    background-color: white;
+    border: 0.5px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    margin: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 80px;
+
+}
+
+.title-container {
+    width : 500px;
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    font-weight: 300;
+}
+
+.quantity-container {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    font-weight: 200;
+}
+
+.price-container {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    font-weight: 200;
+}
