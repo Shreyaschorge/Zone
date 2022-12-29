@@ -30,12 +30,17 @@ async def all_users_orders(req):
     session = req.ctx.session
     userId = req.ctx.current_user["uuid"]
     async with session.begin():
-        q = select(Order).where(Order.userId == userId).options(
-            selectinload(Order.products))
+        q = (select(Order)
+             .join(OrderProduct, Order.uuid == OrderProduct.orderId)
+             .join(Product, OrderProduct.productId == Product.uuid)
+             .filter(Order.userId == userId)
+             .options(selectinload(Order.products)
+                      .selectinload(Product.order_products)))
+
         result = await session.execute(q)
         all_orders = result.scalars().all()
 
-    return response.json([order.to_dict() for order in all_orders], status=200)
+    return response.json([order.to_orderProducts_dict() for order in all_orders], status=200)
 
 
 @order.get("/<uuid>")
@@ -46,7 +51,7 @@ async def single_order(req, uuid):
         qu = (select(Order)
               .join(OrderProduct, Order.uuid == OrderProduct.orderId)
               .join(Product, OrderProduct.productId == Product.uuid)
-              .filter(and_(Order.uuid == uuid))
+              .filter(Order.uuid == uuid)
               .options(selectinload(Order.products)
               .selectinload(Product.order_products)))
 
