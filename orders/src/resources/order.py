@@ -43,19 +43,20 @@ async def all_users_orders(req):
 async def single_order(req, uuid):
     session = req.ctx.session
     async with session.begin():
-        q = select(Order).where(Order.uuid == uuid).options(
-            selectinload(Order.products))
+        qu = (select(Order)
+              .join(OrderProduct, Order.uuid == OrderProduct.orderId)
+              .join(Product, OrderProduct.productId == Product.uuid)
+              .filter(and_(Order.uuid == uuid))
+              .options(selectinload(Order.products)
+              .selectinload(Product.order_products)))
 
-        try:
-            result = await session.execute(q)
-            existing_order = result.scalars().one()
-        except NoResultFound:
-            raise NotFoundException()
+        result = await session.execute(qu)
+        existing_order = result.scalars().first()
 
     if existing_order.userId != req.ctx.current_user["uuid"]:
         raise BadRequestException("Can't access orders of another user")
 
-    return response.json(existing_order.to_dict(), status=200)
+    return response.json(existing_order.to_orderProducts_dict(), status=200)
 
 
 @order.post('/')

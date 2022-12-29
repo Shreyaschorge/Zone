@@ -22,7 +22,6 @@ spec:
           volumeMounts:
             - name: auth-pg-volume
               mountPath: /var/lib/postgresql/data
-              subPath: postgres
           env:
             - name: POSTGRES_USER
               value: postgres

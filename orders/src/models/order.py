@@ -50,7 +50,7 @@ class Order(Base):
                 "uuid": product.uuid,
                 "userId": product.userId,
                 "quantity": [prod.quantity for prod in product.order_products if prod.productId == product.uuid and self.uuid == prod.orderId]
-            }) for product in self.products]
+            }) for product in self.products][0]
         }
 
 
