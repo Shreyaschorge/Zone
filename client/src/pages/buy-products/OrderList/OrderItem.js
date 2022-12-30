@@ -44,7 +44,7 @@ export const OrderItem = ({ order, orders, setOrders }) => {
                             <Button danger onClick={handleCancel} >Cancel Order</Button>
                         </div>}
                     </div>
-                    {order.products.map(({ title, price, quantity }, index) => <ProductCard key={`${index}`} {...({ title, price, quantity })} />)}
+                    {order && order.products && order.products.map(({ title, price, quantity }, index) => <ProductCard key={`${index}`} {...({ title, price, quantity })} />)}
                 </Panel>
             </Collapse>
         </Badge.Ribbon>

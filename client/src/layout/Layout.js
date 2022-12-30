@@ -43,7 +43,7 @@ const Layout = ({ children }) => {
             Token.removeUser()
             notification.success({
                 message: "Logged out successfully",
-                placement: 'bottomLeft'
+                placement: 'bottomRight'
             })
             push('/')
             window.location.reload()

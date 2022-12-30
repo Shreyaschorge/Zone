@@ -21,7 +21,7 @@ export const Order = () => {
     const { push } = useHistory()
     const { setErrors } = useApp()
 
-    const [order, setOrder] = useState([])
+    const [order, setOrder] = useState(null)
 
     const fetchOrder = useCallback(async () => {
         if (orderId) {
@@ -36,10 +36,8 @@ export const Order = () => {
     }, [])
 
     useEffect(() => {
-        if (orderId) {
-            fetchOrder()
-        }
-    }, [orderId])
+        fetchOrder()
+    }, [])
 
     const getSubTotal = () => {
         let subtotal = 0
@@ -59,7 +57,7 @@ export const Order = () => {
                 message: 'Payment created successfully',
                 placement: 'bottomRight'
             })
-            push('/sell-products/paidProducts')
+            push('/buy-products')
         } catch (err) {
             setErrors(err.response.data.errors)
         }
@@ -78,10 +76,10 @@ export const Order = () => {
 
 
 
-    const getProducts = () => {
+    const getProducts = useCallback(() => {
         return (
             <>
-                {order.products.map(({ price, title, quantity }, index) => <ProductCard key={`${index}`} {...({ price, title, quantity })} />)}
+                {order && order.products && order.products.map(({ price, title, quantity }, index) => <ProductCard key={`${index}`} {...({ price, title, quantity })} />)}
 
                 <div className='bottom-container'>
                     <div >
@@ -93,7 +91,8 @@ export const Order = () => {
                 </div>
             </>
         )
-    }
+    }, [order])
+
 
     return (<>
         {
@@ -101,10 +100,10 @@ export const Order = () => {
                 ?
                 <>
                     <Header style={{ marginBottom: "30px" }} title={`📝 ${orderId} `} titleSuffix={getOrderStatus}>
-                        {order.status === 'draft'
+                        {order && order.status === 'draft'
                             && <StripeCheckout
                                 token={({ id }) => handleCheckout(id)}
-                                stripeKey={process.env.STRIPE_PK}
+                                stripeKey={''}
                                 amount={parseInt(getSubTotal() * 100)}
                                 currency='inr'
                                 email={jwt_decode(Token.getLocalAccessToken()).sub.email}
