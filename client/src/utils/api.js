@@ -58,8 +58,8 @@ Axios.interceptors.response.use(
 
           // check if we get the access_token, if yes, that means refresh_token is not expired.
           // fetch access_token and update it in local_storage.
-          if (res.data.data && res.data.data.access_token) {
-            Token.updateLocalAccessToken(res.data.data.access_token);
+          if (res.data && res.data.access_token) {
+            Token.updateLocalAccessToken(res.data.access_token);
           } else {
             // if refresh_token expires log user out of the application.
             Token.removeUser();

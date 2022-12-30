@@ -10,4 +10,4 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: hostpath
   hostPath:
-    path: "/Users/shreyas/jetstream"
+    path: "/Users/shreyas/zone/jetstream"

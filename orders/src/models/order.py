@@ -49,8 +49,8 @@ class Order(Base):
                 "description": product.description,
                 "uuid": product.uuid,
                 "userId": product.userId,
-                "quantity": [prod.quantity for prod in product.order_products if prod.productId == product.uuid and self.uuid == prod.orderId]
-            }) for product in self.products][0]
+                "quantity": [prod.quantity for prod in product.order_products if prod.productId == product.uuid and self.uuid == prod.orderId][0]
+            }) for product in self.products]
         }
 
 
