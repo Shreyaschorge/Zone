@@ -39,7 +39,7 @@ export const BuyProducts = () => {
   }, [allProducts])
 
   return <>
-    <Header style={{ marginBottom: "30px" }} title={'🎄 Merry Christmas'} />
+    <Header style={{ marginBottom: "30px" }} title={'🎊 Happy new year..'} />
     {allProducts && allProducts.length === 0 ? getZeroStateScreen() : getAllProductsScreen()}
   </>;
 };
