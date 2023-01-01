@@ -34,7 +34,7 @@ This application is divided into 5 micro-services.
 
 Messaging System used to communicate between these services is [NATS](https://nats.io/).
 
-Messages are persisted using [NATS-Jetstream].
+Messages are persisted using [NATS-Jetstream](https://docs.nats.io/nats-concepts/jetstream).
 
 The zone has 3 streams that persist messages.
 
@@ -99,7 +99,7 @@ Install [IngressController](https://kubernetes.github.io/ingress-nginx/), [cert-
 
     when prompted subject add following subjects for above streams repectively `PRODUCT.\*`, `ORDER.\*`, `PAYMENT.\*`
 
-    here `*` is subject (wildcard)[https://docs.nats.io/nats-concepts/subjects#wildcards]
+    here `*` is subject [wildcard](https://docs.nats.io/nats-concepts/subjects#wildcards)
 
     example
 
