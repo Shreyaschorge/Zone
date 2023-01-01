@@ -15,12 +15,6 @@ spec:
       containers:
         - name: client
           image: shreyaschorge/zone-client
-          env:
-            - name: STRIPE_PK
-              valueFrom:
-                secretKeyRef:
-                  name: stripe-pk
-                  key: STRIPE_PK
 ---
 apiVersion: v1
 kind: Service

@@ -82,7 +82,7 @@ export const Auth = () => {
                     <div className='right-container'>
                         <h1 className='header'>Welcome to Zone 👽</h1>
                         <div className='description'>
-                            <p>Zone is an on-demand C2C where you can buy as well as sell products.</p>
+                            <p>Zone is an C2C where you can buy as well as sell products.</p>
                         </div>
 
                         <div className='form-fields'>

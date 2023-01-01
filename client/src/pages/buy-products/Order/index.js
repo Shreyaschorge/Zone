@@ -103,7 +103,7 @@ export const Order = () => {
                         {order && order.status === 'draft'
                             && <StripeCheckout
                                 token={({ id }) => handleCheckout(id)}
-                                stripeKey={''}
+                                stripeKey={'pk_test_51Fbvu2IhiIaaOKPcd4YUbbtYhs4wnPpwbEp2V2ZVKDuXeA0IwgDVTABTx6KcJv26UVAYlcd2dYz1Hes5y5AzCRam00gDsAjkd8'}
                                 amount={parseInt(getSubTotal() * 100)}
                                 currency='inr'
                                 email={jwt_decode(Token.getLocalAccessToken()).sub.email}
