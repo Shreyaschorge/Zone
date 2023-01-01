@@ -1,0 +1,55 @@
+.right-container{
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-left: 60px;
+    padding-right: 60px;
+}
+
+.left-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-left: 60px;
+    padding-right: 60px;
+}
+
+.form {
+    width: 100%;
+}
+
+.form-fields{
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.header{
+    text-align: left;
+    width: 100%;
+    
+}
+
+.description {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.have-account{
+    width: 100%;
+    text-align: right;
+}
+
+.have-account:hover{
+    width: 100%;
+    text-align: right;
+    color: #1677FF;
+    cursor: pointer;
+}
+
+.notification{
+    z-index: 100;
+}

@@ -1,0 +1,1 @@
+APP_NAME = 'payments_service'

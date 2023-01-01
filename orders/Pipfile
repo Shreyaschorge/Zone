@@ -1,0 +1,22 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+sanic = "*"
+nats-py = "*"
+marshmallow = "*"
+asyncpg = "*"
+pyjwt = "*"
+nanoid = "*"
+aiosqlite = "*"
+sqlalchemy = {extras = ["asyncio"], version = "*"}
+zone-common = "*"
+python-decouple = "*"
+sanic-cors = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.10"
