@@ -97,7 +97,7 @@ Install [IngressController](https://kubernetes.github.io/ingress-nginx/), [cert-
 
     use command `nats stream add`
 
-    when prompted subject add following subjects for above streams repectively `PRODUCT.\*`, `ORDER.\*`, `PAYMENT.\*`
+    when prompted subject add following subjects for above streams repectively `PRODUCT.*`, `ORDER.*`, `PAYMENT.*`
 
     here `*` is subject [wildcard](https://docs.nats.io/nats-concepts/subjects#wildcards)
 
